@@ -1388,6 +1388,32 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 }
 .logo-img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex-shrink: 0; display: block; }
 .logo-name { display: none; font-family: 'Anton', sans-serif; font-size: 20px; letter-spacing: 0.03em; color: var(--text); }
+
+/* ===== ESGOTADO ===== */
+.menu-item.esgotado { opacity: 0.72; }
+.menu-item.esgotado .menu-item-img {
+  position: relative;
+}
+.menu-item.esgotado .menu-item-img::after {
+  content: 'ESGOTADO';
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 10, 0, 0.65);
+  color: #fff;
+  font-family: 'Anton', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.15em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  z-index: 2;
+}
+.menu-item.esgotado .menu-item-add {
+  opacity: 0.3;
+  pointer-events: none;
+  cursor: not-allowed;
+}
 </style>
 </head>
 <body>
@@ -2863,6 +2889,43 @@ document.addEventListener('DOMContentLoaded', function() {
 
   closeBtn.addEventListener('click', closeCheckout);
   overlay.addEventListener('click', e => { if (e.target === overlay) closeCheckout(); });
+})();
+</script>
+
+<script>
+/* ============ DISPONIBILIDADE (GOOGLE SHEETS) ============ */
+(function () {
+  const SHEET_ID = '1CBP566fRJeB4_Jdgex9vTBZr7A_WqNBBxdTDMvSPU8s';
+  const url = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:json';
+
+  fetch(url)
+    .then(function (r) { return r.text(); })
+    .then(function (text) {
+      const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/);
+      if (!match) return;
+
+      const rows = JSON.parse(match[1]).table.rows;
+      const availability = {};
+
+      rows.forEach(function (row) {
+        if (!row.c || !row.c[0] || !row.c[0].v) return;
+        const name = String(row.c[0].v).trim();
+        const val  = row.c[1] && row.c[1].v ? String(row.c[1].v).trim().toUpperCase() : 'SIM';
+        availability[name] = (val !== 'NÃO' && val !== 'NAO');
+      });
+
+      document.querySelectorAll('.menu-item').forEach(function (item) {
+        const btn = item.querySelector('.menu-item-add');
+        if (!btn) return;
+        const name = (btn.dataset.name || '').trim();
+        if (name && Object.prototype.hasOwnProperty.call(availability, name) && !availability[name]) {
+          item.classList.add('esgotado');
+        }
+      });
+    })
+    .catch(function (err) {
+      console.warn('[Ágape] Disponibilidade: falha ao carregar planilha.', err);
+    });
 })();
 </script>
 
