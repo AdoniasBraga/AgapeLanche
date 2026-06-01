@@ -117,7 +117,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 .checkout-close {
   position: absolute;
   top: 16px; right: 20px;
-  width: 36px; height: 36px;
+  width: 44px; height: 44px;
   border-radius: 50%;
   background: var(--surface-2);
   font-size: 16px;
@@ -759,12 +759,16 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 /* Cardápio / Menu */
 .menu-filters {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
-  justify-content: center;
+  justify-content: flex-start;
   margin-bottom: 36px;
-  padding: 0 4px;
+  padding: 0 4px 4px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+.menu-filters::-webkit-scrollbar { display: none; }
 .filter-btn {
   padding: 10px 18px;
   border: 1.5px solid var(--gold);
@@ -1040,6 +1044,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   .footer-inner { grid-template-columns: 2fr 1fr; gap: 40px; }
   .footer { padding-bottom: 50px; }
   .section { padding: 100px 20px; }
+  .menu-filters { flex-wrap: wrap; overflow-x: visible; justify-content: center; }
   .logo-img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
   .logo-name { display: inline; }
 }
@@ -1205,7 +1210,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   width: 100%;
   border-radius: 24px 24px 0 0;
   padding: 20px 20px 40px;
-  max-height: 85vh;
+  max-height: 85svh;
   overflow-y: auto;
   position: relative;
   display: flex;
@@ -1229,7 +1234,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 .cart-close {
   position: absolute;
   top: 16px; right: 16px;
-  width: 36px; height: 36px;
+  width: 44px; height: 44px;
   border-radius: 50%;
   background: var(--surface-2);
   border: none;
@@ -1290,7 +1295,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   gap: 8px;
 }
 .cart-qty-btn {
-  width: 32px; height: 32px;
+  width: 40px; height: 40px;
   border-radius: 50%;
   border: 2px solid var(--border);
   background: var(--surface);
@@ -1388,6 +1393,47 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 }
 .logo-img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex-shrink: 0; display: block; }
 .logo-name { display: none; font-family: 'Anton', sans-serif; font-size: 20px; letter-spacing: 0.03em; color: var(--text); }
+#cardapio { scroll-margin-top: 80px; }
+
+/* ===== MODAL DE BEBIDAS ===== */
+.bebida-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  align-items: flex-end;
+}
+.bebida-modal-overlay.open { display: flex; }
+.bebida-modal {
+  background: var(--bg-0);
+  width: 100%;
+  border-radius: 24px 24px 0 0;
+  padding: 24px 20px 40px;
+  max-height: 90svh;
+  overflow-y: auto;
+  position: relative;
+}
+.bebida-leite-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  min-height: 56px;
+}
+.bebida-leite-label input[type="checkbox"] {
+  width: 20px; height: 20px;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.bebida-leite-nome { font-weight: 700; font-size: 15px; color: var(--text); }
+.bebida-leite-sub  { font-size: 13px; color: var(--text-dim); margin-top: 2px; }
 
 /* ===== ESGOTADO ===== */
 .menu-item.esgotado { opacity: 0.72; }
@@ -1454,7 +1500,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   </div>
   <div class="hero-inner">
     <div class="hero-content">
-      <div class="badge"><span class="dot"></span>Aberto agora · Entrega 18:30–00:00</div>
+      <div class="badge" id="heroBadge"><span class="dot"></span>Aberto agora · Entrega 18:30–00:00</div>
       <h1 class="hero-title">Sabor que<br>vem do <span class="accent">coração.</span></h1>
       <p class="hero-tagline">Lanches e pizzas feitos com amor, ingredientes frescos e aquele gosto de comida de verdade. Delivery só na Zona Leste — rápido, quentinho e sem enrolação.</p>
       <div class="hero-cta">
@@ -1504,6 +1550,14 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
       <div class="cat-img"><img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&q=80&auto=format&fit=crop" alt="Batata Frita" loading="lazy"></div>
       <div class="cat-name">Batata Frita<small class="cat-count">Crocante por fora</small></div>
     </a>
+    <a href="#cardapio" class="cat-card reveal" data-filter="refrigerantes">
+      <div class="cat-img"><img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=600&q=80&auto=format&fit=crop" alt="Refrigerantes" loading="lazy"></div>
+      <div class="cat-name">Refrigerantes<small class="cat-count">Lata, 1L e 2L</small></div>
+    </a>
+    <a href="#cardapio" class="cat-card reveal" data-filter="sucos">
+      <div class="cat-img"><img src="https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=600&q=80&auto=format&fit=crop" alt="Sucos" loading="lazy"></div>
+      <div class="cat-name">Sucos<small class="cat-count">Naturais da região</small></div>
+    </a>
   </div>
 </section>
 
@@ -1521,6 +1575,8 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <button class="filter-btn" data-filter="misto">🥪 Misto/Queijo</button>
     <button class="filter-btn" data-filter="kikao">🌭 Kikão</button>
     <button class="filter-btn" data-filter="batata">🍟 Batata Frita</button>
+    <button class="filter-btn" data-filter="refrigerantes">🥤 Refrigerantes</button>
+    <button class="filter-btn" data-filter="sucos">🧃 Sucos</button>
   </div>
 
   <div class="menu-grid" id="menuGrid">
@@ -2052,6 +2108,176 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
       </div>
     </article>
 
+    <!-- REFRIGERANTES -->
+    <article class="menu-item reveal" data-cat="refrigerantes">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Coca-Cola" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Coca-Cola</h3>
+      <p class="menu-item-desc">Lata · 1 Litro · 1,5 Litro · 2 Litros</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 5,00</div>
+        <button class="menu-item-add" data-name="Coca-Cola" data-drink="true" data-sizes='[{"label":"Lata","price":5},{"label":"1 Litro","price":10},{"label":"1,5 Litro","price":12},{"label":"2 Litros","price":15}]' aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="refrigerantes">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Fanta Laranja" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Fanta Laranja</h3>
+      <p class="menu-item-desc">Lata · 1 Litro · 2 Litros</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 5,00</div>
+        <button class="menu-item-add" data-name="Fanta Laranja" data-drink="true" data-sizes='[{"label":"Lata","price":5},{"label":"1 Litro","price":8},{"label":"2 Litros","price":15}]' aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="refrigerantes">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Fanta Uva" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Fanta Uva</h3>
+      <p class="menu-item-desc">Lata · 1,5 Litro · 2 Litros</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 5,00</div>
+        <button class="menu-item-add" data-name="Fanta Uva" data-drink="true" data-sizes='[{"label":"Lata","price":5},{"label":"1,5 Litro","price":12},{"label":"2 Litros","price":15}]' aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="refrigerantes">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Pepsi" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Pepsi</h3>
+      <p class="menu-item-desc">Lata · 1 Litro · 2 Litros</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 5,00</div>
+        <button class="menu-item-add" data-name="Pepsi" data-drink="true" data-sizes='[{"label":"Lata","price":5},{"label":"1 Litro","price":6},{"label":"2 Litros","price":12}]' aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="refrigerantes">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Antártica" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Antártica</h3>
+      <p class="menu-item-desc">Lata · 1 Litro · 2 Litros</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 5,00</div>
+        <button class="menu-item-add" data-name="Antártica" data-drink="true" data-sizes='[{"label":"Lata","price":5},{"label":"1 Litro","price":6},{"label":"2 Litros","price":12}]' aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="refrigerantes">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Baré" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Baré</h3>
+      <p class="menu-item-desc">1 Litro · 2 Litros</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 5,00</div>
+        <button class="menu-item-add" data-name="Baré" data-drink="true" data-sizes='[{"label":"1 Litro","price":5},{"label":"2 Litros","price":10}]' aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="refrigerantes">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Tuxaua" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Tuxaua</h3>
+      <p class="menu-item-desc">Gelado · 1 Litro</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 5,00</div>
+        <button class="menu-item-add" data-name="Tuxaua" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="refrigerantes">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Magistral" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Magistral</h3>
+      <p class="menu-item-desc">Gelado · 1 Litro</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 5,00</div>
+        <button class="menu-item-add" data-name="Magistral" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="refrigerantes">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Regente" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Regente</h3>
+      <p class="menu-item-desc">Gelado · 1 Litro</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 5,00</div>
+        <button class="menu-item-add" data-name="Regente" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <!-- SUCOS -->
+    <article class="menu-item reveal" data-cat="sucos">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=700&q=80" alt="Suco de Goiaba" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Suco de Goiaba</h3>
+      <p class="menu-item-desc">Natural · 400ml · 500ml · 1 Litro. Com leite +R$ 2,00.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 5,00</div>
+        <button class="menu-item-add" data-name="Suco de Goiaba" data-drink="true" data-suco="true" data-sizes='[{"label":"400ml","price":5},{"label":"500ml","price":7},{"label":"1 Litro","price":14}]' aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="sucos">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=700&q=80" alt="Suco de Maracujá" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Suco de Maracujá</h3>
+      <p class="menu-item-desc">Natural · 400ml · 500ml · 1 Litro. Com leite +R$ 2,00.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 5,00</div>
+        <button class="menu-item-add" data-name="Suco de Maracujá" data-drink="true" data-suco="true" data-sizes='[{"label":"400ml","price":5},{"label":"500ml","price":7},{"label":"1 Litro","price":14}]' aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="sucos">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=700&q=80" alt="Suco de Cupuaçu" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Suco de Cupuaçu</h3>
+      <p class="menu-item-desc">Natural · 400ml · 500ml · 1 Litro. Com leite +R$ 2,00.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 5,00</div>
+        <button class="menu-item-add" data-name="Suco de Cupuaçu" data-drink="true" data-suco="true" data-sizes='[{"label":"400ml","price":5},{"label":"500ml","price":7},{"label":"1 Litro","price":14}]' aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="sucos">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=700&q=80" alt="Suco de Taperebá" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Suco de Taperebá</h3>
+      <p class="menu-item-desc">Natural · 400ml · 500ml · 1 Litro. Com leite +R$ 2,00.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 5,00</div>
+        <button class="menu-item-add" data-name="Suco de Taperebá" data-drink="true" data-suco="true" data-sizes='[{"label":"400ml","price":5},{"label":"500ml","price":7},{"label":"1 Litro","price":14}]' aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="sucos">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=700&q=80" alt="Suco de Graviola" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Suco de Graviola</h3>
+      <p class="menu-item-desc">Natural · 400ml · 500ml · 1 Litro. Com leite +R$ 2,00.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 5,00</div>
+        <button class="menu-item-add" data-name="Suco de Graviola" data-drink="true" data-suco="true" data-sizes='[{"label":"400ml","price":5},{"label":"500ml","price":7},{"label":"1 Litro","price":14}]' aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
   </div>
 </section>
 
@@ -2177,7 +2403,46 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 </footer>
 
 
+<!-- ============ MODAL DE BEBIDAS ============ -->
+<div class="bebida-modal-overlay" id="bebidaModalOverlay">
+  <div class="bebida-modal">
+    <div class="pizza-modal-handle"></div>
+    <button class="pizza-modal-close" id="bebidaModalClose" aria-label="Fechar">✕</button>
+    <h3 class="pizza-modal-title" id="bebidaModalTitle"></h3>
+    <p class="pizza-modal-sub">Escolha o tamanho</p>
+    <span class="pizza-size-label">Tamanho</span>
+    <div class="pizza-size-options" id="bebidaSizeOptions"></div>
+    <div id="bebidaLeiteSection" style="display:none; margin-bottom:20px;">
+      <span class="pizza-size-label">Opções</span>
+      <label class="bebida-leite-label" for="bebidaLeiteToggle">
+        <input type="checkbox" id="bebidaLeiteToggle">
+        <div>
+          <div class="bebida-leite-nome">Com leite</div>
+          <div class="bebida-leite-sub">+R$ 2,00</div>
+        </div>
+      </label>
+    </div>
+    <button class="pizza-modal-confirm" id="bebidaModalConfirm">Adicionar ao Pedido</button>
+  </div>
+</div>
+
 <script>
+/* ============ BADGE HORÁRIO ============ */
+(function() {
+  const badge = document.getElementById('heroBadge');
+  if (!badge) return;
+  const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Manaus' }));
+  const h = now.getHours();
+  const m = now.getMinutes();
+  const minutos = h * 60 + m;
+  const abertura = 18 * 60 + 30;
+  const fechamento = 24 * 60;
+  const aberto = minutos >= abertura && minutos < fechamento;
+  badge.innerHTML = aberto
+    ? '<span class="dot"></span>Aberto agora · Entrega 18:30–00:00'
+    : '<span style="width:7px;height:7px;background:#aaa;border-radius:50%;display:inline-block"></span>Fechado · Abrimos às 18:30';
+})();
+
 /* ============ TYPEWRITER ============ */
 (function() {
   const el = document.getElementById('blurText');
@@ -2433,7 +2698,7 @@ document.addEventListener('DOMContentLoaded', function() {
     toast._t = setTimeout(() => { toast.style.opacity = '0'; }, 2000);
   }
 
-  document.querySelectorAll('.menu-item-add:not([data-pizza])').forEach(btn => {
+  document.querySelectorAll('.menu-item-add:not([data-pizza]):not([data-drink])').forEach(btn => {
     btn.addEventListener('click', e => {
       e.preventDefault();
       const name = btn.dataset.name || 'Item';
@@ -2890,6 +3155,92 @@ document.addEventListener('DOMContentLoaded', function() {
   closeBtn.addEventListener('click', closeCheckout);
   overlay.addEventListener('click', e => { if (e.target === overlay) closeCheckout(); });
 })();
+</script>
+
+<script>
+/* ============ MODAL DE BEBIDAS ============ */
+document.addEventListener('DOMContentLoaded', function () {
+  (function () {
+    var overlay      = document.getElementById('bebidaModalOverlay');
+    var closeBtn     = document.getElementById('bebidaModalClose');
+    var modalTitle   = document.getElementById('bebidaModalTitle');
+    var sizeOptions  = document.getElementById('bebidaSizeOptions');
+    var confirmBtn   = document.getElementById('bebidaModalConfirm');
+    var leiteSection = document.getElementById('bebidaLeiteSection');
+    var leiteToggle  = document.getElementById('bebidaLeiteToggle');
+
+    var selectedSize = null;
+    var currentName  = '';
+    var isSucoModal  = false;
+
+    function openBebidaModal(name, sizesJson, isSuco) {
+      currentName  = name;
+      selectedSize = null;
+      isSucoModal  = !!isSuco;
+      if (leiteToggle) leiteToggle.checked = false;
+
+      modalTitle.textContent = name;
+      leiteSection.style.display = isSuco ? 'block' : 'none';
+
+      var sizes = JSON.parse(sizesJson);
+      sizeOptions.innerHTML = '';
+      sizes.forEach(function (s) {
+        var btn = document.createElement('button');
+        btn.className = 'pizza-size-btn';
+        btn.type = 'button';
+        btn.innerHTML =
+          '<div><div class="pizza-size-name">' + s.label + '</div></div>' +
+          '<div class="pizza-size-price">R$ ' + s.price.toFixed(2).replace('.', ',') + '</div>';
+        btn.addEventListener('click', function () {
+          sizeOptions.querySelectorAll('.pizza-size-btn').forEach(function (b) {
+            b.classList.remove('selected');
+          });
+          btn.classList.add('selected');
+          selectedSize = s;
+        });
+        sizeOptions.appendChild(btn);
+      });
+
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    confirmBtn.addEventListener('click', function () {
+      if (!selectedSize) { alert('Escolha um tamanho!'); return; }
+      var price    = selectedSize.price;
+      var sizeName = selectedSize.label;
+      if (isSucoModal && leiteToggle && leiteToggle.checked) {
+        price    += 2;
+        sizeName += ' c/ leite';
+      }
+      if (typeof window.cartAddItem === 'function') {
+        window.cartAddItem(currentName, sizeName, price);
+      }
+      closeModal();
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeModal();
+    });
+
+    document.querySelectorAll('.menu-item-add[data-drink]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        openBebidaModal(
+          btn.dataset.name  || 'Bebida',
+          btn.dataset.sizes || '[]',
+          btn.dataset.suco  === 'true'
+        );
+      });
+    });
+  })();
+});
 </script>
 
 <script>
