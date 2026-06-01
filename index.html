@@ -1,0 +1,2899 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F5ECD7">
+<meta name="description" content="Ágape Lanche & Pizzaria — Lanches e pizzas com sabor de amor. Entrega na Zona Leste de Manaus.">
+<title>Ágape Lanche & Pizzaria</title>
+<link rel="icon" type="image/png" href="img/logo.png">
+<link rel="apple-touch-icon" href="img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-0: #F5ECD7;
+  --bg-1: #EDE0C8;
+  --bg-2: #E4D3B2;
+  --surface: #EBE0CA;
+  --surface-2: #E2D2B5;
+  --border: rgba(160, 110, 50, 0.2);
+  --border-2: rgba(0, 0, 0, 0.08);
+  --text: #1A0A00;
+  --text-dim: #6A4A30;
+  --text-faint: #A07858;
+  --accent: #D52B1E;
+  --accent-hot: #FF3B2E;
+  --accent-soft: rgba(213, 43, 30, 0.12);
+  --accent-glow: rgba(213, 43, 30, 0.32);
+  --gold: #FDC82F;
+  --gold-soft: rgba(253, 200, 47, 0.18);
+  --green: #2dd673;
+  --green-soft: rgba(45, 214, 115, 0.12);
+  --shadow-lg: 0 30px 80px -20px rgba(100, 50, 20, 0.2);
+  --radius: 16px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+*::selection { background: var(--accent); color: #fff; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: 'Manrope', system-ui, sans-serif;
+  background: var(--bg-0);
+  color: var(--text);
+  line-height: 1.5;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(213, 43, 30, 0.06), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 80%, rgba(253, 200, 47, 0.05), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 0% 100%, rgba(213, 43, 30, 0.04), transparent 60%);
+  background-attachment: fixed;
+}
+
+@media (max-width: 768px), (hover: none) {
+  body { background-attachment: scroll; }
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.25;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.3 0 0 0 0 0.1 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+.container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 2; }
+
+/* ====== CHECKOUT MODAL ====== */
+.checkout-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(26, 10, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.checkout-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.checkout-drawer {
+  background: var(--bg-0);
+  width: 100%;
+  max-width: 600px;
+  border-radius: 24px 24px 0 0;
+  padding: 12px 20px 48px;
+  max-height: 92svh;
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+.checkout-overlay.open .checkout-drawer {
+  transform: translateY(0);
+}
+.checkout-handle {
+  width: 40px; height: 4px;
+  background: var(--border-2);
+  border-radius: 2px;
+  margin: 0 auto 20px;
+}
+.checkout-close {
+  position: absolute;
+  top: 16px; right: 20px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-dim);
+}
+.checkout-title {
+  font-family: 'Anton', sans-serif;
+  font-size: 26px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  margin-bottom: 24px;
+  text-align: center;
+}
+.checkout-section { margin-bottom: 20px; }
+.checkout-hidden { display: none !important; }
+.checkout-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+  display: block;
+}
+.checkout-type-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.checkout-type-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 8px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text-dim);
+  font-weight: 700;
+  transition: all 0.2s;
+  min-height: 80px;
+}
+.checkout-type-btn.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.checkout-type-icon { font-size: 26px; }
+.checkout-type-name { font-size: 11px; line-height: 1.2; text-align: center; text-transform: uppercase; letter-spacing: 0.04em; }
+.checkout-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  font-family: 'Manrope', sans-serif;
+  font-size: 16px;
+  color: var(--text);
+  margin-bottom: 10px;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.checkout-input:focus { outline: none; border-color: var(--accent); }
+.checkout-input::placeholder { color: var(--text-faint); }
+.checkout-row {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 10px;
+}
+.checkout-row .checkout-input { margin-bottom: 0; }
+.checkout-payment-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.checkout-pay-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 8px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-dim);
+  transition: all 0.2s;
+  min-height: 64px;
+}
+.checkout-pay-btn span { font-size: 22px; }
+.checkout-pay-btn.selected {
+  border-color: var(--gold);
+  background: var(--gold-soft);
+  color: var(--text);
+}
+.pix-box {
+  background: var(--surface);
+  border: 1.5px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.pix-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.pix-key-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.pix-key {
+  font-family: 'Anton', sans-serif;
+  font-size: 22px;
+  color: var(--text);
+  letter-spacing: 0.04em;
+}
+.pix-copy-btn {
+  padding: 8px 16px;
+  border-radius: 100px;
+  background: var(--gold);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.pix-hint { font-size: 13px; color: var(--text-dim); line-height: 1.4; }
+.checkout-card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.checkout-card-btn {
+  padding: 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dim);
+  transition: all 0.2s;
+  min-height: 48px;
+}
+.checkout-card-btn.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.checkout-confirm-btn {
+  width: 100%;
+  padding: 18px;
+  background: #25D366;
+  color: #fff;
+  border-radius: var(--radius);
+  font-size: 17px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.2s, transform 0.2s;
+  min-height: 60px;
+}
+.checkout-confirm-btn:active { transform: scale(0.98); background: #1fbc58; }
+@media (min-width: 768px) {
+  .checkout-overlay { align-items: center; }
+  .checkout-drawer { border-radius: 24px; }
+}
+
+/* ===== NAV ===== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 14px 20px;
+  background: rgba(245, 236, 215, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 3px solid var(--gold);
+}
+.nav-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.logo {
+  font-family: 'Anton', sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.logo span { color: var(--accent); }
+.logo-mark { display: none; }
+
+.nav-links { display: none; gap: 32px; list-style: none; }
+.nav-links a {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-dim);
+  transition: color 0.2s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -6px; left: 0;
+  width: 0; height: 2px;
+  background: var(--gold);
+  transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-cta {
+  display: none;
+  background: var(--gold);
+  color: #1A0A00;
+  padding: 10px 22px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 14px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover { transform: translateY(-2px); background: #E6B520; box-shadow: 0 10px 30px rgba(253, 200, 47, 0.4); }
+
+.menu-btn {
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.menu-btn span {
+  display: block;
+  width: 22px; height: 2px;
+  background: var(--text);
+  position: relative;
+  transition: background 0.3s;
+}
+.menu-btn span::before, .menu-btn span::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 22px; height: 2px;
+  background: var(--text);
+  transition: transform 0.3s, top 0.3s;
+}
+.menu-btn span::before { top: -7px; }
+.menu-btn span::after { top: 7px; }
+.menu-btn.open span { background: transparent; }
+.menu-btn.open span::before { top: 0; transform: rotate(45deg); }
+.menu-btn.open span::after { top: 0; transform: rotate(-45deg); }
+
+.mobile-menu {
+  position: fixed;
+  top: 65px; left: 0; right: 0;
+  background: rgba(245, 236, 215, 0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transform: translateY(-120%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 99;
+}
+.mobile-menu.open { transform: translateY(0); }
+.mobile-menu ul { list-style: none; padding: 16px 24px 24px; }
+.mobile-menu a {
+  display: block;
+  padding: 16px 0;
+  font-size: 18px;
+  font-weight: 500;
+  border-bottom: 1px solid var(--border);
+}
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu .menu-cta {
+  margin-top: 16px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 100px;
+  padding: 14px;
+  text-align: center;
+  border: none;
+  font-weight: 700;
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 110px 20px 60px;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: right center;
+  animation: subtle-zoom 14s ease infinite alternate;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    rgba(245, 236, 215, 1) 0%,
+    rgba(245, 236, 215, 0.93) 28%,
+    rgba(245, 236, 215, 0.65) 55%,
+    rgba(245, 236, 215, 0.08) 100%
+  );
+}
+.hero-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+.hero-content { max-width: 660px; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border: 1px solid rgba(253, 200, 47, 0.5);
+  border-radius: 100px;
+  background: var(--gold);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 22px;
+  opacity: 0;
+  animation: fadeInUp 0.7s 0.05s ease forwards;
+}
+.dot {
+  width: 7px; height: 7px;
+  background: var(--text);
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(26, 10, 0, 0.5);
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  0% { box-shadow: 0 0 0 0 rgba(26, 10, 0, 0.5); }
+  70% { box-shadow: 0 0 0 8px rgba(26, 10, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(26, 10, 0, 0); }
+}
+
+.typing-line {
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(22px, 6vw, 32px);
+  font-weight: 700;
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  flex-wrap: wrap;
+  min-height: 1.3em;
+  color: var(--gold);
+}
+.blur-word {
+  display: inline-block;
+  margin-right: 0.28em;
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(-30px);
+  will-change: transform, filter, opacity;
+  transition:
+    opacity 0.35s ease,
+    filter 0.35s ease,
+    transform 0.35s ease;
+}
+.blur-word.step-1 {
+  opacity: 0.5;
+  filter: blur(5px);
+  transform: translateY(5px);
+}
+.blur-word.visible {
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateY(0);
+}
+.cursor {
+  display: inline-block;
+  width: 3px;
+  height: 1em;
+  background: var(--accent);
+  margin-left: 1px;
+  vertical-align: middle;
+  transform: translateY(2px);
+  animation: blink 0.85s steps(1) infinite;
+}
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.hero-title {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(60px, 14vw, 160px);
+  line-height: 0.88;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  color: var(--accent);
+  opacity: 0;
+  animation: fadeInUp 0.7s 0.3s ease forwards;
+}
+.hero-title .accent {
+  color: var(--accent);
+  position: relative;
+  display: inline-block;
+}
+.hero-title .accent::after {
+  content: '';
+  position: absolute;
+  left: -2%; right: -2%;
+  bottom: 6%;
+  height: 14%;
+  background: var(--accent);
+  opacity: 0.15;
+  border-radius: 4px;
+  z-index: -1;
+}
+
+.hero-tagline {
+  font-size: clamp(15px, 1.8vw, 17px);
+  color: var(--text-dim);
+  max-width: 500px;
+  margin-bottom: 36px;
+  line-height: 1.65;
+  opacity: 0;
+  animation: fadeInUp 0.7s 0.45s ease forwards;
+}
+
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  opacity: 0;
+  animation: fadeInUp 0.7s 0.6s ease forwards;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 26px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 15px;
+  transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+  white-space: nowrap;
+  border: none;
+  letter-spacing: 0.01em;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 10px 28px var(--accent-glow);
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 40px var(--accent-glow); }
+.btn-secondary {
+  background: var(--gold);
+  color: var(--text);
+  border: none;
+  box-shadow: 0 8px 24px rgba(253, 200, 47, 0.35);
+}
+.btn-secondary:hover { background: #f0ba18; transform: translateY(-3px); box-shadow: 0 14px 36px rgba(253, 200, 47, 0.5); }
+.btn-arrow { transition: transform 0.25s; }
+.btn-primary:hover .btn-arrow { transform: translateX(4px); }
+
+@keyframes subtle-zoom {
+  from { transform: scale(1.02); }
+  to { transform: scale(1.12); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Marquee strip */
+.marquee {
+  position: relative;
+  background: var(--accent);
+  overflow: hidden;
+  padding: 18px 0;
+  border-top: 1px solid rgba(0,0,0,0.2);
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  z-index: 2;
+}
+.marquee-track {
+  display: flex;
+  gap: 48px;
+  animation: marquee 24s linear infinite;
+  white-space: nowrap;
+  width: max-content;
+}
+.marquee-item {
+  font-family: 'Anton', sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+}
+.marquee-dot {
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.5);
+  align-self: center;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Sections */
+.section { padding: 80px 20px; position: relative; z-index: 2; }
+.section-head { text-align: center; margin-bottom: 48px; max-width: 720px; margin-left: auto; margin-right: auto; }
+.section-head.left { text-align: left; margin-left: 0; }
+.section-eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.section-title {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(40px, 8vw, 76px);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--text);
+  position: relative;
+  display: inline-block;
+}
+.section-title::after {
+  content: '';
+  display: block;
+  width: 56px;
+  height: 5px;
+  background: var(--gold);
+  border-radius: 3px;
+  margin-top: 10px;
+}
+.section-head.left .section-title::after { margin-left: 0; }
+.section-head:not(.left) .section-title::after { margin-left: auto; margin-right: auto; }
+.section-title .accent { color: var(--accent); }
+.section-sub {
+  font-size: 16px;
+  color: var(--text-dim);
+  margin-top: 16px;
+  line-height: 1.6;
+}
+
+/* Categories */
+.categories {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.cat-card {
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.4s;
+}
+.cat-card:hover { transform: translateY(-10px); }
+.cat-img {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-bottom: 16px;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(100, 50, 20, 0.12);
+}
+.cat-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px dashed var(--accent);
+  transform: scale(1.05) rotate(0deg);
+  opacity: 0;
+  transition: transform 0.5s, opacity 0.4s;
+}
+.cat-card:hover .cat-img::after {
+  transform: scale(1.06) rotate(20deg);
+  opacity: 0.7;
+}
+.cat-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+.cat-card:hover .cat-img img { transform: scale(1.12); }
+.cat-name {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(18px, 4.5vw, 22px);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+.cat-count {
+  display: block;
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  color: var(--text-faint);
+  margin-top: 4px;
+  letter-spacing: 0.05em;
+  text-transform: none;
+}
+
+/* Cardápio / Menu */
+.menu-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 36px;
+  padding: 0 4px;
+}
+.filter-btn {
+  padding: 10px 18px;
+  border: 1.5px solid var(--gold);
+  border-radius: 100px;
+  background: rgba(0,0,0,0.03);
+  color: var(--text-dim);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  transition: all 0.25s;
+  white-space: nowrap;
+}
+.filter-btn:hover { color: var(--text); border-color: var(--accent); background: var(--accent-soft); }
+.filter-btn.active {
+  background: var(--gold);
+  color: #1A0A00;
+  border-color: var(--gold);
+  box-shadow: 0 8px 20px rgba(253, 200, 47, 0.4);
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.menu-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 16px;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.menu-item.hidden { display: none; }
+.menu-item:hover {
+  transform: translateY(-6px);
+  border-color: rgba(213, 43, 30, 0.4);
+  box-shadow: 0 30px 60px rgba(100, 50, 20, 0.15);
+}
+.menu-item-img {
+  aspect-ratio: 4/3;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 14px;
+  background: var(--bg-2);
+  position: relative;
+}
+.menu-item-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+.menu-item:hover .menu-item-img img { transform: scale(1.08); }
+.menu-item-badge {
+  position: absolute;
+  top: 10px; left: 10px;
+  background: var(--gold);
+  color: #1A0A00;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 100px;
+}
+.menu-item-badge.gold {
+  background: var(--gold);
+  color: #1A0A00;
+}
+.menu-item-name {
+  font-family: 'Anton', sans-serif;
+  font-size: 22px;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  margin-bottom: 6px;
+  line-height: 1.05;
+  color: var(--text);
+}
+.menu-item-desc {
+  font-size: 13.5px;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+  line-height: 1.5;
+  flex: 1;
+}
+.menu-item-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  gap: 8px;
+}
+.menu-item-price {
+  font-family: 'Manrope', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--gold);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.menu-item-price small { font-size: 14px; font-weight: 700; color: var(--text-faint); }
+.menu-item-add {
+  width: 48px; height: 48px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  transition: transform 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+.menu-item-add:hover { transform: scale(1.1) rotate(90deg); box-shadow: 0 8px 20px var(--accent-glow); }
+
+/* Reveal-on-scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+/* Testimonials */
+.testimonials {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.testimonial {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+}
+.stars { color: var(--gold); font-size: 18px; margin-bottom: 12px; letter-spacing: 2px; }
+.testimonial p { font-size: 15px; color: var(--text-dim); line-height: 1.65; margin-bottom: 20px; }
+.who { display: flex; align-items: center; gap: 12px; }
+.avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.who .name { font-weight: 700; font-size: 14px; color: var(--text); }
+.who .role { font-size: 12px; color: var(--text-faint); margin-top: 2px; }
+
+/* Location */
+.location {
+  display: grid;
+  gap: 28px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.map-wrap {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  aspect-ratio: 16/9;
+}
+.map-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
+.info-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.info-card-full { grid-column: 1 / -1; }
+.info-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+.info-card h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; color: var(--text); }
+.info-card p { font-size: 14px; color: var(--text-dim); line-height: 1.5; }
+.info-card a { color: var(--accent); }
+
+/* Ride buttons */
+.ride-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.btn-ride {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 13px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+.btn-ride:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+.btn-uber { background: #000; color: #fff; }
+
+/* Footer */
+.footer {
+  padding: 60px 20px 100px;
+  border-top: 5px solid var(--gold);
+  position: relative;
+  z-index: 2;
+}
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--gold), var(--accent));
+  opacity: 0.6;
+}
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  gap: 36px;
+}
+.footer-brand .logo { font-size: 28px; margin-bottom: 14px; display: inline-flex; }
+.footer-brand p { font-size: 14px; color: var(--text-dim); line-height: 1.6; max-width: 320px; }
+.footer-col h5 {
+  font-family: 'Anton', sans-serif;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col a { font-size: 14px; color: var(--text-dim); transition: color 0.2s; }
+.footer-col a:hover { color: var(--gold); }
+.socials { display: flex; gap: 10px; flex-wrap: wrap; }
+.socials a {
+  width: 40px; height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  transition: all 0.25s;
+}
+.socials a:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  transform: translateY(-3px);
+}
+.footer-bottom {
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 720px) {
+  .nav { padding: 16px 24px; }
+  .nav-links { display: flex; }
+  .nav-cta { display: inline-flex; }
+  .menu-btn { display: none; }
+  .hero { padding: 140px 20px 100px; }
+  .categories { grid-template-columns: repeat(5, 1fr); gap: 24px; }
+  .menu-grid { grid-template-columns: repeat(2, 1fr); }
+  .testimonials { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .location { grid-template-columns: 1.3fr 1fr; gap: 32px; }
+  .footer-inner { grid-template-columns: 2fr 1fr 1fr 1.2fr; gap: 40px; }
+  .footer { padding-bottom: 50px; }
+  .section { padding: 100px 20px; }
+  #blurText { display: none; }
+  .logo-img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+  .logo-name { display: inline; }
+}
+@media (min-width: 960px) {
+  .menu-grid { grid-template-columns: repeat(3, 1fr); }
+  .about { grid-template-columns: 1fr 1.1fr; gap: 70px; }
+}
+@media (max-width: 480px) {
+  .hero-cta { width: 100%; }
+  .hero-cta .btn { flex: 1; justify-content: center; min-width: 0; }
+}
+
+/* ===== PIZZA SIZE MODAL ===== */
+.pizza-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  align-items: flex-end;
+}
+.pizza-modal-overlay.open { display: flex; }
+.pizza-modal {
+  background: var(--bg-0);
+  width: 100%;
+  border-radius: 24px 24px 0 0;
+  padding: 24px 20px 40px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+.pizza-modal-handle {
+  width: 40px; height: 4px;
+  background: var(--border);
+  border-radius: 4px;
+  margin: 0 auto 20px;
+}
+.pizza-modal-title {
+  font-family: 'Anton', sans-serif;
+  font-size: 22px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.pizza-modal-sub {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+}
+.pizza-size-label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  margin-bottom: 12px;
+  display: block;
+}
+.pizza-size-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.pizza-size-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 56px;
+  font-size: 16px;
+  width: 100%;
+  text-align: left;
+}
+.pizza-size-btn:active,
+.pizza-size-btn.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.pizza-size-name { font-weight: 700; color: var(--text); }
+.pizza-size-desc { font-size: 13px; color: var(--text-dim); margin-top: 2px; }
+.pizza-size-price { font-weight: 800; color: var(--gold); font-size: 18px; flex-shrink: 0; margin-left: 12px; }
+.pizza-modal-confirm {
+  width: 100%;
+  padding: 18px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 100px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.pizza-modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+}
+
+/* ===== CARRINHO ===== */
+.cart-fab {
+  position: fixed;
+  bottom: 80px;
+  bottom: max(80px, calc(20px + env(safe-area-inset-bottom)));
+  right: 20px;
+  z-index: 150;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 100px;
+  padding: 14px 20px;
+  display: none;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(213,43,30,0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+  min-height: 52px;
+}
+.cart-fab.visible { display: flex; }
+.cart-fab:active { transform: scale(0.96); }
+.cart-fab-count {
+  background: var(--gold);
+  color: #1A0A00;
+  border-radius: 100px;
+  padding: 2px 8px;
+  font-size: 13px;
+  font-weight: 800;
+}
+.cart-fab-total { font-size: 15px; }
+
+.cart-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  align-items: flex-end;
+}
+.cart-overlay.open { display: flex; }
+
+.cart-drawer {
+  background: var(--bg-0);
+  width: 100%;
+  border-radius: 24px 24px 0 0;
+  padding: 20px 20px 40px;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.cart-handle {
+  width: 40px; height: 4px;
+  background: var(--border);
+  border-radius: 4px;
+  margin: 0 auto 20px;
+  flex-shrink: 0;
+}
+.cart-title {
+  font-family: 'Anton', sans-serif;
+  font-size: 22px;
+  color: var(--text);
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+.cart-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cart-empty {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--text-faint);
+  font-size: 15px;
+}
+.cart-empty-icon { font-size: 48px; margin-bottom: 12px; }
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 16px;
+}
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.cart-item:last-child { border-bottom: none; }
+.cart-item-info { flex: 1; min-width: 0; }
+.cart-item-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cart-item-sub {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+.cart-item-price {
+  font-weight: 800;
+  color: var(--gold);
+  font-size: 15px;
+  white-space: nowrap;
+}
+.cart-item-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cart-qty-btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.cart-qty-btn.minus { color: var(--accent); border-color: var(--accent-soft); }
+.cart-qty-btn.plus { background: var(--accent); color: #fff; border-color: var(--accent); }
+.cart-qty-num {
+  font-weight: 700;
+  font-size: 16px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.cart-footer { flex-shrink: 0; }
+.cart-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0 16px;
+}
+.cart-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.cart-total-label { font-size: 14px; color: var(--text-dim); }
+.cart-total-label.main { font-size: 17px; font-weight: 700; color: var(--text); }
+.cart-total-value { font-weight: 800; font-size: 22px; color: var(--accent); }
+.cart-checkout-btn {
+  width: 100%;
+  padding: 18px;
+  background: #25D366;
+  color: #fff;
+  border: none;
+  border-radius: 100px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+.cart-clear-btn {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  color: var(--text-faint);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 10px;
+  min-height: 44px;
+}
+
+@media (min-width: 768px) {
+  .cart-fab { bottom: 32px; right: 32px; }
+  .cart-drawer { max-width: 480px; margin: 0 auto; border-radius: 24px; }
+  .cart-overlay { align-items: center; justify-content: center; }
+}
+
+.typing-line {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  min-height: 1.5em;
+  margin-bottom: 0;
+  letter-spacing: 0.02em;
+  flex: 1;
+}
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: var(--gold);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink 0.5s ease-in-out infinite alternate;
+}
+@keyframes blink {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+.logo-img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex-shrink: 0; display: block; }
+.logo-name { display: none; font-family: 'Anton', sans-serif; font-size: 20px; letter-spacing: 0.03em; color: var(--text); }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo" aria-label="Ágape Lanche e Pizzaria">
+      <span class="logo-name">ÁGAPE</span>
+    </a>
+    <p class="typing-line" id="blurText"></p>
+    <ul class="nav-links">
+      <li><a href="#categorias">Categorias</a></li>
+      <li><a href="#cardapio">Cardápio</a></li>
+      <li><a href="#avaliacoes">Avaliações</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+    <a href="#cardapio" class="nav-cta">Peça Online</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menu"><span></span></button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#categorias">Categorias</a></li>
+    <li><a href="#cardapio">Cardápio</a></li>
+    <li><a href="#avaliacoes">Avaliações</a></li>
+    <li><a href="#contato">Contato</a></li>
+    <li><a href="https://wa.me/5592985672066?text=Oi!%20Quero%20fazer%20um%20pedido" class="menu-cta">Peça Online →</a></li>
+  </ul>
+</div>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-bg">
+    <img src="img/logo.png" alt="" aria-hidden="true" loading="eager">
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="badge"><span class="dot"></span>Aberto agora · Entrega 18:30–00:00</div>
+      <h1 class="hero-title">Sabor que<br>vem do <span class="accent">coração.</span></h1>
+      <p class="hero-tagline">Lanches e pizzas feitos com amor, ingredientes frescos e aquele gosto de comida de verdade. Delivery só na Zona Leste — rápido, quentinho e sem enrolação.</p>
+      <div class="hero-cta">
+        <a href="https://wa.me/5592985672066?text=Oi!%20Quero%20fazer%20um%20pedido" target="_blank" class="btn btn-primary">Peça Agora <span class="btn-arrow">→</span></a>
+        <a href="#cardapio" class="btn btn-secondary">Ver Cardápio</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MARQUEE ============ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="marqueeTrack">
+    <span class="marquee-item">Pizzas artesanais</span><span class="marquee-dot">●</span>
+    <span class="marquee-item">Lanches caprichados</span><span class="marquee-dot">●</span>
+    <span class="marquee-item">Batata frita crocante</span><span class="marquee-dot">●</span>
+    <span class="marquee-item">Frete fixo R$5</span><span class="marquee-dot">●</span>
+    <span class="marquee-item">Aberto até meia-noite</span><span class="marquee-dot">●</span>
+    <span class="marquee-item">Zona Leste · Manaus</span><span class="marquee-dot">●</span>
+  </div>
+</div>
+
+<!-- ============ CATEGORIAS ============ -->
+<section class="section" id="categorias">
+  <div class="section-head reveal">
+    <span class="section-eyebrow">Nossas categorias</span>
+    <h2 class="section-title">Escolha seu<br><span class="accent">favorito</span></h2>
+  </div>
+  <div class="categories">
+    <a href="#cardapio" class="cat-card reveal" data-filter="lanches">
+      <div class="cat-img"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80&auto=format&fit=crop" alt="Lanches" loading="lazy"></div>
+      <div class="cat-name">Lanches<small class="cat-count">Vários sabores</small></div>
+    </a>
+    <a href="#cardapio" class="cat-card reveal" data-filter="pizzas">
+      <div class="cat-img"><img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&q=80&auto=format&fit=crop" alt="Pizzas" loading="lazy"></div>
+      <div class="cat-name">Pizzas<small class="cat-count">Doces e salgadas</small></div>
+    </a>
+    <a href="#cardapio" class="cat-card reveal" data-filter="misto">
+      <div class="cat-img"><img src="https://images.unsplash.com/photo-1528736235302-52922df5c122?w=600&q=80&auto=format&fit=crop" alt="Misto e Queijo" loading="lazy"></div>
+      <div class="cat-name">Misto/Queijo<small class="cat-count">Clássico e gostoso</small></div>
+    </a>
+    <a href="#cardapio" class="cat-card reveal" data-filter="kikao">
+      <div class="cat-img"><img src="https://images.unsplash.com/photo-1602030638412-bb8dcc0bc8b0?w=600&q=80&auto=format&fit=crop" alt="Kikão" loading="lazy"></div>
+      <div class="cat-name">Kikão<small class="cat-count">Exclusivo da casa</small></div>
+    </a>
+    <a href="#cardapio" class="cat-card reveal" data-filter="batata">
+      <div class="cat-img"><img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&q=80&auto=format&fit=crop" alt="Batata Frita" loading="lazy"></div>
+      <div class="cat-name">Batata Frita<small class="cat-count">Crocante por fora</small></div>
+    </a>
+  </div>
+</section>
+
+<!-- ============ CARDÁPIO ============ -->
+<section class="section" id="cardapio" style="padding-top: 40px;">
+  <div class="section-head reveal">
+    <span class="section-eyebrow">Cardápio</span>
+    <h2 class="section-title">Os queridinhos<br>da <span class="accent">casa</span></h2>
+    <p class="section-sub">Tudo feito na hora, com capricho e amor. Toque no <strong>+</strong> pra mandar o pedido pelo WhatsApp.</p>
+  </div>
+
+  <div class="menu-filters reveal" id="menuFilters">
+    <button class="filter-btn active" data-filter="lanches">🍔 Hambúrguers</button>
+    <button class="filter-btn" data-filter="pizzas">🍕 Pizzas</button>
+    <button class="filter-btn" data-filter="misto">🥪 Misto/Queijo</button>
+    <button class="filter-btn" data-filter="kikao">🌭 Kikão</button>
+    <button class="filter-btn" data-filter="batata">🍟 Batata Frita</button>
+  </div>
+
+  <div class="menu-grid" id="menuGrid">
+
+    <!-- LANCHES -->
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Salada" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Salada</h3>
+      <p class="menu-item-desc">Pão Bola, carne de hambúrguer, ovo, queijo mussarela, Presunto, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 10,00</div>
+        <button class="menu-item-add" data-name="X-Salada" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Salada Acebolado" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Salada Acebolado</h3>
+      <p class="menu-item-desc">Pão Bola, carne de hambúrguer, ovo, cebola, queijo mussarela, Presunto, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 12,00</div>
+        <button class="menu-item-add" data-name="X-Salada Acebolado" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Especial</span>
+        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&q=80" alt="X-Salada Especial" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Salada Especial</h3>
+      <p class="menu-item-desc">Pão Bola, 2 carnes de hambúrguer, ovo, queijo mussarela, Presunto, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 12,00</div>
+        <button class="menu-item-add" data-name="X-Salada Especial" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&q=80" alt="X-Salada Especial Acebolado" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Salada Especial Acebolado</h3>
+      <p class="menu-item-desc">Pão Bola, 2 carnes de hambúrguer, ovo, cebola, queijo mussarela, Presunto, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 13,00</div>
+        <button class="menu-item-add" data-name="X-Salada Especial Acebolado" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Calabresa" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Calabresa</h3>
+      <p class="menu-item-desc">Pão bola, carne de hambúrguer, calabresa, ovo, queijo mussarela, presunto, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 13,00</div>
+        <button class="menu-item-add" data-name="X-Calabresa" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Calabresa Acebolado" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Calabresa Acebolado</h3>
+      <p class="menu-item-desc">Pão Bola, carne de hambúrguer, calabresa, cebola, ovo, queijo mussarela, presunto, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 14,00</div>
+        <button class="menu-item-add" data-name="X-Calabresa Acebolado" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Mais pedido</span>
+        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&q=80" alt="X-Bacon" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Bacon</h3>
+      <p class="menu-item-desc">Pão Bola, carne de hambúrguer, Bacon, ovo, queijo mussarela, presunto, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 13,00</div>
+        <button class="menu-item-add" data-name="X-Bacon" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&q=80" alt="X-Bacon Acebolado" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Bacon Acebolado</h3>
+      <p class="menu-item-desc">Pão bola, carne de hambúrguer, Bacon, cebola, ovo, queijo mussarela, presunto, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 14,00</div>
+        <button class="menu-item-add" data-name="X-Bacon Acebolado" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Salsicha" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Salsicha</h3>
+      <p class="menu-item-desc">Pão bola, carne de hambúrguer, Salsicha, ovo, queijo mussarela, presunto, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 12,00</div>
+        <button class="menu-item-add" data-name="X-Salsicha" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Egg" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Egg</h3>
+      <p class="menu-item-desc">Pão Bola, ovo, queijo mussarela, Presunto, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 8,00</div>
+        <button class="menu-item-add" data-name="X-Egg" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Maionese" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Maionese</h3>
+      <p class="menu-item-desc">Pão Bola, carne de hambúrguer, queijo mussarela, Presunto, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 8,00</div>
+        <button class="menu-item-add" data-name="X-Maionese" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Burguer" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Burguer</h3>
+      <p class="menu-item-desc">Pão Bola, carne de hambúrguer, queijo mussarela, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 8,00</div>
+        <button class="menu-item-add" data-name="X-Burguer" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Americano" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Americano</h3>
+      <p class="menu-item-desc">3 pães de forma, ovo, queijo mussarela, presunto, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 8,00</div>
+        <button class="menu-item-add" data-name="X-Americano" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Exclusivo</span>
+        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&q=80" alt="X-Ágape" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Ágape</h3>
+      <p class="menu-item-desc">3 pães de forma, carne de hambúrguer, ovo, Bacon, Calabresa, queijo mussarela, Presunto, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 15,00</div>
+        <button class="menu-item-add" data-name="X-Ágape" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Especial</span>
+        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&q=80" alt="X-Ágape Acebolado" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Ágape Acebolado</h3>
+      <p class="menu-item-desc">3 pães de forma, carne de hambúrguer, ovo, Bacon, Calabresa, cebola, queijo mussarela, Presunto, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 16,00</div>
+        <button class="menu-item-add" data-name="X-Ágape Acebolado" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Especial</span>
+        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&q=80" alt="X-Tudo" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Tudo</h3>
+      <p class="menu-item-desc">Pão Bola, carne, Bacon, Calabresa, Salsicha, ovo, queijo mussarela, Presunto, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 17,00</div>
+        <button class="menu-item-add" data-name="X-Tudo" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Especial</span>
+        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&q=80" alt="X-Tudo Acebolado" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">X-Tudo Acebolado</h3>
+      <p class="menu-item-desc">Pão Bola, carne, Bacon, Calabresa, Salsicha, ovo, cebola, queijo mussarela, Presunto, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 18,00</div>
+        <button class="menu-item-add" data-name="X-Tudo Acebolado" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="lanches">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="Hambúrguer" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Hambúrguer</h3>
+      <p class="menu-item-desc">Pão bola, carne de hambúrguer, Alface e tomate.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 6,00</div>
+        <button class="menu-item-add" data-name="Hambúrguer" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <!-- PIZZAS -->
+    <article class="menu-item reveal" data-cat="pizzas">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Mussarela" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Pizza Mussarela</h3>
+      <p class="menu-item-desc">Queijo Mussarela, Tomate, azeitona e orégano.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 30,00</div>
+        <button class="menu-item-add" data-name="Pizza Mussarela" data-pizza="true" data-desc="Queijo Mussarela, Tomate, azeitona e orégano." aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="pizzas">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Calabresa" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Pizza Calabresa</h3>
+      <p class="menu-item-desc">Queijo Mussarela, Calabresa, Cebola, azeitona e orégano.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 30,00</div>
+        <button class="menu-item-add" data-name="Pizza Calabresa" data-pizza="true" data-desc="Queijo Mussarela, Calabresa, Cebola, azeitona e orégano." aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="pizzas">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=700&q=80" alt="Pizza Portuguesa" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Pizza Portuguesa</h3>
+      <p class="menu-item-desc">Queijo Mussarela, Presunto, milho, ervilha, ovo, tomate, pimentão, azeitona e orégano.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 30,00</div>
+        <button class="menu-item-add" data-name="Pizza Portuguesa" data-pizza="true" data-desc="Queijo Mussarela, Presunto, milho, ervilha, ovo, tomate, pimentão, azeitona e orégano." aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="pizzas">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Napolitana" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Pizza Napolitana</h3>
+      <p class="menu-item-desc">Queijo Mussarela, Presunto, ovo, tomate, azeitona e orégano.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 30,00</div>
+        <button class="menu-item-add" data-name="Pizza Napolitana" data-pizza="true" data-desc="Queijo Mussarela, Presunto, ovo, tomate, azeitona e orégano." aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="pizzas">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Presunto" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Pizza Presunto</h3>
+      <p class="menu-item-desc">Queijo Mussarela, Presunto, tomate, azeitona e orégano.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 30,00</div>
+        <button class="menu-item-add" data-name="Pizza Presunto" data-pizza="true" data-desc="Queijo Mussarela, Presunto, tomate, azeitona e orégano." aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="pizzas">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=700&q=80" alt="Pizza Catupiry" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Pizza Catupiry</h3>
+      <p class="menu-item-desc">Queijo Mussarela, Catupiry, tomate, azeitona e orégano.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 30,00</div>
+        <button class="menu-item-add" data-name="Pizza Catupiry" data-pizza="true" data-desc="Queijo Mussarela, Catupiry, tomate, azeitona e orégano." aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="pizzas">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Especial</span>
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Quatro Queijo" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Pizza Quatro Queijo</h3>
+      <p class="menu-item-desc">Queijo Mussarela, Catupiry, queijo Cheddar, Queijo parmesão, tomate, azeitona e orégano.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 35,00</div>
+        <button class="menu-item-add" data-name="Pizza Quatro Queijo" data-pizza="true" data-desc="Queijo Mussarela, Catupiry, queijo Cheddar, Queijo parmesão, tomate, azeitona e orégano." aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="pizzas">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Especial</span>
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Calabresa Especial" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Pizza Calabresa Especial</h3>
+      <p class="menu-item-desc">Queijo Mussarela, Calabresa, Catupiry, Cebola, tomate, azeitona e orégano.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 35,00</div>
+        <button class="menu-item-add" data-name="Pizza Calabresa Especial" data-pizza="true" data-desc="Queijo Mussarela, Calabresa, Catupiry, Cebola, tomate, azeitona e orégano." aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="pizzas">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Especial</span>
+        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=700&q=80" alt="Pizza Portuguesa Especial" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Pizza Portuguesa Especial</h3>
+      <p class="menu-item-desc">Queijo Mussarela, Calabresa, presunto, milho, ervilha, ovo, tomate, pimentão, azeitona e orégano.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 35,00</div>
+        <button class="menu-item-add" data-name="Pizza Portuguesa Especial" data-pizza="true" data-desc="Queijo Mussarela, Calabresa, presunto, milho, ervilha, ovo, tomate, pimentão, azeitona e orégano." aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="pizzas">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=700&q=80" alt="Pizza Frango" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Pizza Frango</h3>
+      <p class="menu-item-desc">Queijo Mussarela, Frango, milho, ervilha, tomate, pimentão, azeitona e orégano.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 38,00</div>
+        <button class="menu-item-add" data-name="Pizza Frango" data-pizza="true" data-desc="Queijo Mussarela, Frango, milho, ervilha, tomate, pimentão, azeitona e orégano." aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="pizzas">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Bacon" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Pizza Bacon</h3>
+      <p class="menu-item-desc">Queijo Mussarela, Bacon, Cebola, tomate, azeitona e orégano.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 38,00</div>
+        <button class="menu-item-add" data-name="Pizza Bacon" data-pizza="true" data-desc="Queijo Mussarela, Bacon, Cebola, tomate, azeitona e orégano." aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="pizzas">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Exclusivo</span>
+        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=700&q=80" alt="Pizza Frango com Catupiry" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Pizza Frango com Catupiry</h3>
+      <p class="menu-item-desc">Queijo Mussarela, Frango, Catupiry, milho, ervilha, tomate, pimentão, azeitona e orégano.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 38,00</div>
+        <button class="menu-item-add" data-name="Pizza Frango com Catupiry" data-pizza="true" data-desc="Queijo Mussarela, Frango, Catupiry, milho, ervilha, tomate, pimentão, azeitona e orégano." aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="pizzas">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Especial</span>
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Bacon Especial" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Pizza Bacon Especial</h3>
+      <p class="menu-item-desc">Queijo Mussarela, Bacon, queijo Cheddar, Cebola, tomate, azeitona e orégano.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 38,00</div>
+        <button class="menu-item-add" data-name="Pizza Bacon Especial" data-pizza="true" data-desc="Queijo Mussarela, Bacon, queijo Cheddar, Cebola, tomate, azeitona e orégano." aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="pizzas">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Exclusivo</span>
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza À Moda da Casa" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Pizza À Moda da Casa</h3>
+      <p class="menu-item-desc">Queijo Mussarela, Bacon, calabresa, Cebola, queijo parmesão, tomate, azeitona e orégano.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 38,00</div>
+        <button class="menu-item-add" data-name="Pizza À Moda da Casa" data-pizza="true" data-desc="Queijo Mussarela, Bacon, calabresa, Cebola, queijo parmesão, tomate, azeitona e orégano." aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="pizzas">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Carne" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Pizza Carne</h3>
+      <p class="menu-item-desc">Queijo Mussarela, Carne, Cebola, pimentão, tomate, azeitona e orégano.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>A partir de R$</small> 38,00</div>
+        <button class="menu-item-add" data-name="Pizza Carne" data-pizza="true" data-desc="Queijo Mussarela, Carne, Cebola, pimentão, tomate, azeitona e orégano." aria-label="Escolher tamanho">+</button>
+      </div>
+    </article>
+
+    <!-- MISTO/QUEIJO -->
+    <article class="menu-item reveal" data-cat="misto">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1528736235302-52922df5c122?w=700&q=80" alt="Mixto Simples" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Mixto Simples</h3>
+      <p class="menu-item-desc">2 Pães de forma, queijo mussarela, presunto.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 5,00</div>
+        <button class="menu-item-add" data-name="Mixto Simples" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="misto">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Duplo</span>
+        <img src="https://images.unsplash.com/photo-1528736235302-52922df5c122?w=700&q=80" alt="Mixto Duplo" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Mixto Duplo</h3>
+      <p class="menu-item-desc">3 Pães de forma, 2 queijo mussarela, 2 presunto.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 6,00</div>
+        <button class="menu-item-add" data-name="Mixto Duplo" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="misto">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1509722747041-616f39b57569?w=700&q=80" alt="Queijo Simples" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Queijo Simples</h3>
+      <p class="menu-item-desc">2 Pães de forma, queijo mussarela.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 5,00</div>
+        <button class="menu-item-add" data-name="Queijo Simples" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="misto">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Duplo</span>
+        <img src="https://images.unsplash.com/photo-1509722747041-616f39b57569?w=700&q=80" alt="Queijo Duplo" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Queijo Duplo</h3>
+      <p class="menu-item-desc">3 Pães de forma, 2 queijo mussarela.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 6,00</div>
+        <button class="menu-item-add" data-name="Queijo Duplo" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <!-- KIKÃO -->
+    <article class="menu-item reveal" data-cat="kikao">
+      <div class="menu-item-img">
+        <img src="https://images.unsplash.com/photo-1602030638412-bb8dcc0bc8b0?w=700&q=80" alt="Kikão Simples" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Kikão Simples</h3>
+      <p class="menu-item-desc">Pão, salsicha, molho, maionese, catchup, batata palha e queijo ralado.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 6,00</div>
+        <button class="menu-item-add" data-name="Kikão Simples" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="kikao">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Especial</span>
+        <img src="https://images.unsplash.com/photo-1602030638412-bb8dcc0bc8b0?w=700&q=80" alt="Kikão Especial" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Kikão Especial</h3>
+      <p class="menu-item-desc">Pão, salsicha, molho, Bacon, maionese, catchup, batata palha, queijo ralado e queijo mussarela.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 10,00</div>
+        <button class="menu-item-add" data-name="Kikão Especial" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="kikao">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Exclusivo</span>
+        <img src="https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=700&q=80" alt="Kikão Turbinado" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Kikão Turbinado</h3>
+      <p class="menu-item-desc">Pão, salsicha, molho, Bacon, calabresa, maionese, catchup, batata palha, queijo ralado e queijo mussarela.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 12,00</div>
+        <button class="menu-item-add" data-name="Kikão Turbinado" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <!-- BATATA FRITA -->
+    <article class="menu-item reveal" data-cat="batata">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Crocante</span>
+        <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=700&q=80" alt="Batata Frita Pequena" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Porção Pequena</h3>
+      <p class="menu-item-desc">Batata frita crocante, temperada e quentinha.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 13,00</div>
+        <button class="menu-item-add" data-name="Batata Frita Porção Pequena" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+    <article class="menu-item reveal" data-cat="batata">
+      <div class="menu-item-img">
+        <span class="menu-item-badge">Grande</span>
+        <img src="https://images.unsplash.com/photo-1630431341973-02e1b662ec35?w=700&q=80" alt="Batata Frita Grande" loading="lazy">
+      </div>
+      <h3 class="menu-item-name">Porção Grande</h3>
+      <p class="menu-item-desc">Porção generosa de batata frita crocante, ideal para compartilhar.</p>
+      <div class="menu-item-foot">
+        <div class="menu-item-price"><small>R$</small> 25,00</div>
+        <button class="menu-item-add" data-name="Batata Frita Porção Grande" aria-label="Adicionar">+</button>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============ AVALIAÇÕES ============ -->
+<section class="section" id="avaliacoes">
+  <div class="section-head reveal">
+    <span class="section-eyebrow">Avaliações</span>
+    <h2 class="section-title">Quem prova,<br><span class="accent">volta</span>.</h2>
+  </div>
+  <div class="testimonials">
+    <div class="testimonial reveal">
+      <div class="stars">★★★★★</div>
+      <p>A Pizza é simplesmente maravilhosa e o sabor é irresistível! Amei o atendimento e o serviço.</p>
+      <div class="who">
+        <div class="avatar">★</div>
+        <div>
+          <div class="role">Cliente Google</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial reveal">
+      <div class="stars">★★★★★</div>
+      <p>Local bem organizado, bom atendimento e comidas top.</p>
+      <div class="who">
+        <div class="avatar">★</div>
+        <div>
+          <div class="role">Cliente Google</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial reveal">
+      <div class="stars">★★★★★</div>
+      <p>A melhor pizza que já comi.</p>
+      <div class="who">
+        <div class="avatar">★</div>
+        <div>
+          <div class="role">Cliente Google</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTATO / LOCALIZAÇÃO ============ -->
+<section class="section" id="contato">
+  <div class="section-head reveal">
+    <span class="section-eyebrow">Onde estamos</span>
+    <h2 class="section-title">Zona Leste<br><span style="color: var(--gold);">Manaus</span>.</h2>
+  </div>
+  <div class="location">
+    <div class="map-wrap reveal">
+      <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-59.9614%2C-3.0816%2C-59.9414%2C-3.0616&layer=mapnik&marker=-3.0716%2C-59.9514" loading="lazy" title="Localização Ágape Lanche e Pizzaria"></iframe>
+    </div>
+    <div class="info-cards">
+      <div class="info-card reveal">
+        <div class="info-icon">📍</div>
+        <div>
+          <h4>Endereço</h4>
+          <p>R. Eng. Vilar Fiúsa da Câmara, 321<br>São José Operário · Manaus · AM<br>CEP 69085-020</p>
+        </div>
+      </div>
+      <div class="info-card reveal">
+        <div class="info-icon">🕐</div>
+        <div>
+          <h4>Horário</h4>
+          <p>Todos os dias<br>18:30 às 00:00</p>
+        </div>
+      </div>
+      <div class="info-card reveal">
+        <div class="info-icon">📞</div>
+        <div>
+          <h4>WhatsApp</h4>
+          <p><a href="https://wa.me/5592985672066" target="_blank">(92) 9 8567-2066</a></p>
+        </div>
+      </div>
+      <div class="info-card reveal">
+        <div class="info-icon">🛵</div>
+        <div>
+          <h4>Entrega</h4>
+          <p>Frete fixo R$5,00 · Somente Zona Leste · Tempo médio 30min.</p>
+        </div>
+      </div>
+      <div class="info-card info-card-full reveal">
+        <div class="info-icon">🚗</div>
+        <div>
+          <h4>Como chegar</h4>
+          <p>R. Eng. Vilar Fiúsa da Câmara, 321 · São José Operário · Manaus</p>
+          <div class="ride-btns">
+            <a href="https://m.uber.com/ul/?action=setPickup&amp;pickup=my_location&amp;dropoff%5Blatitude%5D=-3.0716&amp;dropoff%5Blongitude%5D=-59.9514&amp;dropoff%5Bnickname%5D=%C3%81gape+Lanche" target="_blank" rel="noopener" class="btn-ride btn-uber"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; flex-shrink: 0;"><circle cx="10" cy="10" r="10" fill="white"/><text x="10" y="14" font-family="Arial Black, sans-serif" font-weight="900" font-size="10" fill="black" text-anchor="middle">U</text></svg> Pedir Uber</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="logo">
+        <img src="img/logo.png" alt="Ágape Lanche e Pizzaria" style="width:80px; height:80px; border-radius:50%; object-fit:cover; margin-bottom:12px; display:block;">
+      </a>
+      <p>Lanche e pizzaria feita com amor e ingredientes frescos. Entregamos sabor e carinho na sua porta, na Zona Leste de Manaus.</p>
+      <div class="socials" style="margin-top: 20px;">
+        <a href="#" aria-label="Instagram">📷</a>
+        <a href="https://wa.me/5592985672066" target="_blank" aria-label="WhatsApp">💬</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Navegar</h5>
+      <ul>
+        <li><a href="#categorias">Categorias</a></li>
+        <li><a href="#cardapio">Cardápio</a></li>
+        <li><a href="#avaliacoes">Avaliações</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Cardápio</h5>
+      <ul>
+        <li><a href="#cardapio">Lanches</a></li>
+        <li><a href="#cardapio">Pizzas</a></li>
+        <li><a href="#cardapio">Misto/Queijo</a></li>
+        <li><a href="#cardapio">Batata Frita</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contato</h5>
+      <ul>
+        <li><a href="https://wa.me/5592985672066" target="_blank">(92) 9 8567-2066</a></li>
+        <li>R. Eng. Vilar Fiúsa da Câmara, 321</li>
+        <li>São José Operário · Manaus · AM</li>
+        <li>18:30 às 00:00</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 Ágape Lanche & Pizzaria · Todos os direitos reservados · Zona Leste · Manaus · AM
+    <a href="https://oliveiralincoln-dev-github-io.vercel.app/" target="_blank" rel="noopener noreferrer" style="color: #FE4701; display: inline-block; margin-top: 6px; padding: 12px 4px; text-decoration: none; transition: text-decoration 0.2s;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Criado por Lincoln Oliveira</a>
+  </div>
+</footer>
+
+
+<script>
+/* ============ TYPEWRITER ============ */
+(function() {
+  const el = document.getElementById('blurText');
+  if (!el) return;
+
+  const text = 'Bem vindo ao Lanche Ágape';
+  const typingSpeed  = 60;
+  const deletingSpeed = 35;
+  const pauseFull    = 2200;
+  const pauseEmpty   = 600;
+
+  let charIndex = 0;
+  let isDeleting = false;
+
+  const cursor = document.createElement('span');
+  cursor.className = 'typing-cursor';
+  el.appendChild(cursor);
+
+  function tick() {
+    if (!isDeleting) {
+      el.firstChild
+        ? (el.firstChild.textContent = text.slice(0, charIndex))
+        : el.insertBefore(document.createTextNode(text.slice(0, charIndex)), cursor);
+      charIndex++;
+      if (charIndex > text.length) {
+        isDeleting = true;
+        setTimeout(tick, pauseFull);
+        return;
+      }
+    } else {
+      charIndex--;
+      if (el.firstChild && el.firstChild !== cursor)
+        el.firstChild.textContent = text.slice(0, charIndex);
+      if (charIndex === 0) {
+        isDeleting = false;
+        setTimeout(tick, pauseEmpty);
+        return;
+      }
+    }
+    setTimeout(tick, isDeleting ? deletingSpeed : typingSpeed);
+  }
+
+  if (!el.firstChild || el.firstChild === cursor) {
+    el.insertBefore(document.createTextNode(''), cursor);
+  }
+
+  setTimeout(tick, 800);
+})();
+
+/* ============ MOBILE MENU ============ */
+(function() {
+  const btn = document.getElementById('menuBtn');
+  const menu = document.getElementById('mobileMenu');
+  if (!btn || !menu) return;
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('open');
+    menu.classList.toggle('open');
+  });
+  menu.addEventListener('click', e => {
+    if (e.target.tagName === 'A') {
+      btn.classList.remove('open');
+      menu.classList.remove('open');
+    }
+  });
+})();
+
+/* ============ SCROLL REVEAL ============ */
+(function() {
+  const items = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(i => i.classList.add('in'));
+    return;
+  }
+  const io = new IntersectionObserver(entries => {
+    entries.forEach((e, idx) => {
+      if (e.isIntersecting) {
+        const delay = (idx % 4) * 80;
+        setTimeout(() => e.target.classList.add('in'), delay);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  items.forEach(i => io.observe(i));
+})();
+
+/* ============ MENU FILTERS — ABAS ============ */
+(function() {
+  const filters = document.getElementById('menuFilters');
+  if (!filters) return;
+
+  function applyFilter(cat) {
+    filters.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.filter === cat);
+    });
+    document.querySelectorAll('.menu-item').forEach(item => {
+      item.classList.toggle('hidden', item.dataset.cat !== cat);
+    });
+  }
+
+  // Inicia com Lanches
+  applyFilter('lanches');
+
+  // Clique nos filtros
+  filters.addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn || !btn.dataset.filter) return;
+    applyFilter(btn.dataset.filter);
+    // Scroll suave até o topo do cardápio
+    const section = document.getElementById('cardapio');
+    if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // Clique nas cat-cards da seção Categorias
+  document.querySelectorAll('.cat-card[data-filter]').forEach(card => {
+    card.addEventListener('click', e => {
+      e.preventDefault();
+      const cat = card.dataset.filter;
+      applyFilter(cat);
+      const section = document.getElementById('cardapio');
+      if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+})();
+
+
+/* ============ MARQUEE INFINITE LOOP ============ */
+(function() {
+  const track = document.getElementById('marqueeTrack');
+  if (!track) return;
+  track.innerHTML = track.innerHTML + track.innerHTML;
+})();
+
+/* ============ CARRINHO ============ */
+document.addEventListener('DOMContentLoaded', function() {
+(function() {
+  const PHONE = '5592985672066';
+  const FRETE = 5.00;
+  let cart = [];
+  window._getCartItems = () => cart;
+
+  const fab        = document.getElementById('cartFab');
+  const fabCount   = document.getElementById('cartFabCount');
+  const fabTotal   = document.getElementById('cartFabTotal');
+  const overlay    = document.getElementById('cartOverlay');
+  const closeBtn   = document.getElementById('cartClose');
+  const emptyEl    = document.getElementById('cartEmpty');
+  const itemsEl    = document.getElementById('cartItems');
+  const footerEl   = document.getElementById('cartFooter');
+  const subtotalEl = document.getElementById('cartSubtotal');
+  const totalEl    = document.getElementById('cartTotal');
+  const checkoutBtn= document.getElementById('cartCheckout');
+  const clearBtn   = document.getElementById('cartClear');
+
+  function formatBRL(val) {
+    return 'R$ ' + val.toFixed(2).replace('.', ',');
+  }
+
+  function getSubtotal() {
+    return cart.reduce((s, i) => s + i.price * i.qty, 0);
+  }
+
+  function getTotalItems() {
+    return cart.reduce((s, i) => s + i.qty, 0);
+  }
+
+  function updateFab() {
+    const total = getTotalItems();
+    if (total === 0) {
+      fab.classList.remove('visible');
+    } else {
+      fab.classList.add('visible');
+      fabCount.textContent = total;
+      fabTotal.textContent = formatBRL(getSubtotal());
+    }
+  }
+
+  function renderCart() {
+    itemsEl.innerHTML = '';
+    if (cart.length === 0) {
+      emptyEl.style.display = 'block';
+      footerEl.style.display = 'none';
+      return;
+    }
+    emptyEl.style.display = 'none';
+    footerEl.style.display = 'block';
+
+    cart.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          ${item.size ? `<div class="cart-item-sub">${item.size}</div>` : ''}
+        </div>
+        <div class="cart-item-controls">
+          <button class="cart-qty-btn minus" data-idx="${idx}" data-action="minus">−</button>
+          <span class="cart-qty-num">${item.qty}</span>
+          <button class="cart-qty-btn plus" data-idx="${idx}" data-action="plus">+</button>
+        </div>
+        <div class="cart-item-price">${formatBRL(item.price * item.qty)}</div>
+      `;
+      itemsEl.appendChild(div);
+    });
+
+    const sub = getSubtotal();
+    subtotalEl.textContent = formatBRL(sub);
+    totalEl.textContent = formatBRL(sub + FRETE);
+  }
+
+  itemsEl.addEventListener('click', e => {
+    const btn = e.target.closest('.cart-qty-btn');
+    if (!btn) return;
+    const idx = parseInt(btn.dataset.idx);
+    if (btn.dataset.action === 'plus') {
+      cart[idx].qty++;
+    } else {
+      cart[idx].qty--;
+      if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    }
+    renderCart();
+    updateFab();
+  });
+
+  window.cartAddItem = function(name, size, price) {
+    const key = name + (size || '');
+    const existing = cart.find(i => i.key === key);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({ key, name, size: size || null, price, qty: 1 });
+    }
+    renderCart();
+    updateFab();
+    showToast(name);
+  };
+
+  function showToast(name) {
+    let toast = document.getElementById('cartToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'cartToast';
+      toast.style.cssText = `
+        position:fixed; bottom:140px; left:50%; transform:translateX(-50%);
+        background:#1A0A00; color:#fff; padding:10px 20px; border-radius:100px;
+        font-size:14px; font-weight:600; z-index:300; opacity:0;
+        transition:opacity 0.3s; white-space:nowrap; pointer-events:none;
+      `;
+      document.body.appendChild(toast);
+    }
+    toast.textContent = '✓ ' + name + ' adicionado!';
+    toast.style.opacity = '1';
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+  }
+
+  document.querySelectorAll('.menu-item-add:not([data-pizza])').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      const name = btn.dataset.name || 'Item';
+      const priceText = btn.closest('.menu-item')
+        ?.querySelector('.menu-item-price')?.textContent
+        ?.replace(/[^\d,]/g, '').replace(',', '.') || '0';
+      const price = parseFloat(priceText) || 0;
+      window.cartAddItem(name, null, price);
+    });
+  });
+
+  fab.addEventListener('click', () => {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+
+  function closeCart() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  closeBtn.addEventListener('click', closeCart);
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) closeCart();
+  });
+
+  clearBtn.addEventListener('click', () => {
+    if (confirm('Limpar todos os itens do carrinho?')) {
+      cart = [];
+      renderCart();
+      updateFab();
+    }
+  });
+
+  checkoutBtn.addEventListener('click', () => {
+    if (cart.length === 0) return;
+    if (typeof window.openCheckoutModal === 'function') {
+      window.openCheckoutModal();
+    }
+  });
+})();
+}); // DOMContentLoaded
+</script>
+
+<!-- ============ PIZZA SIZE MODAL ============ -->
+<div class="pizza-modal-overlay" id="pizzaModalOverlay">
+  <div class="pizza-modal" id="pizzaModal">
+    <div class="pizza-modal-handle"></div>
+    <button class="pizza-modal-close" id="pizzaModalClose">✕</button>
+    <div class="pizza-modal-title" id="pizzaModalName"></div>
+    <div class="pizza-modal-sub" id="pizzaModalDesc"></div>
+    <span class="pizza-size-label">Escolha o tamanho</span>
+    <div class="pizza-size-options" id="pizzaSizeOptions"></div>
+    <button class="pizza-modal-confirm" id="pizzaModalConfirm">
+      Adicionar ao Carrinho
+    </button>
+  </div>
+</div>
+
+<script>
+/* ============ PIZZA MODAL ============ */
+(function() {
+  const phone = '5592985672066';
+  const overlay = document.getElementById('pizzaModalOverlay');
+  const modalName = document.getElementById('pizzaModalName');
+  const modalDesc = document.getElementById('pizzaModalDesc');
+  const sizeOptions = document.getElementById('pizzaSizeOptions');
+  const confirmBtn = document.getElementById('pizzaModalConfirm');
+  const closeBtn = document.getElementById('pizzaModalClose');
+
+  let selectedSize = null;
+
+  const SIZES = {
+    'Pizza Mussarela':          [{label:'Média (M)',desc:'Serve 2 pessoas',price:'30,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'35,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'40,00'}],
+    'Pizza Calabresa':          [{label:'Média (M)',desc:'Serve 2 pessoas',price:'30,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'35,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'40,00'}],
+    'Pizza Portuguesa':         [{label:'Média (M)',desc:'Serve 2 pessoas',price:'30,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'35,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'40,00'}],
+    'Pizza Napolitana':         [{label:'Média (M)',desc:'Serve 2 pessoas',price:'30,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'35,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'40,00'}],
+    'Pizza Presunto':           [{label:'Média (M)',desc:'Serve 2 pessoas',price:'30,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'35,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'40,00'}],
+    'Pizza Catupiry':           [{label:'Média (M)',desc:'Serve 2 pessoas',price:'30,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'35,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'40,00'}],
+    'Pizza Quatro Queijo':      [{label:'Média (M)',desc:'Serve 2 pessoas',price:'35,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'40,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'45,00'}],
+    'Pizza Calabresa Especial': [{label:'Média (M)',desc:'Serve 2 pessoas',price:'35,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'40,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'45,00'}],
+    'Pizza Portuguesa Especial':[{label:'Média (M)',desc:'Serve 2 pessoas',price:'35,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'40,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'45,00'}],
+    'Pizza Frango':             [{label:'Média (M)',desc:'Serve 2 pessoas',price:'38,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'43,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'50,00'}],
+    'Pizza Bacon':              [{label:'Média (M)',desc:'Serve 2 pessoas',price:'38,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'43,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'50,00'}],
+    'Pizza Frango com Catupiry':[{label:'Média (M)',desc:'Serve 2 pessoas',price:'38,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'43,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'50,00'}],
+    'Pizza Bacon Especial':     [{label:'Média (M)',desc:'Serve 2 pessoas',price:'38,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'43,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'50,00'}],
+    'Pizza À Moda da Casa':     [{label:'Média (M)',desc:'Serve 2 pessoas',price:'38,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'43,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'50,00'}],
+    'Pizza Carne':              [{label:'Média (M)',desc:'Serve 2 pessoas',price:'38,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'43,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'50,00'}],
+  };
+
+  function openPizzaModal(name, desc) {
+    modalName.textContent = name;
+    modalDesc.textContent = desc;
+    sizeOptions.innerHTML = '';
+    selectedSize = null;
+
+    const sizes = SIZES[name] || SIZES['Pizza Calabresa'];
+    sizes.forEach(s => {
+      const btn = document.createElement('button');
+      btn.className = 'pizza-size-btn';
+      btn.innerHTML = `
+        <div>
+          <div class="pizza-size-name">${s.label}</div>
+          <div class="pizza-size-desc">${s.desc}</div>
+        </div>
+        <div class="pizza-size-price">R$ ${s.price}</div>
+      `;
+      btn.addEventListener('click', () => {
+        sizeOptions.querySelectorAll('.pizza-size-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedSize = s;
+      });
+      sizeOptions.appendChild(btn);
+    });
+
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+
+  confirmBtn.addEventListener('click', () => {
+    if (!selectedSize) { alert('Selecione um tamanho primeiro!'); return; }
+    const name = modalName.textContent;
+    window.cartAddItem(name, selectedSize.label, parseFloat(selectedSize.price.replace(',','.')));
+    closeModal();
+  });
+
+  document.querySelectorAll('.menu-item-add[data-pizza]').forEach(b => {
+    b.addEventListener('click', () => {
+      openPizzaModal(b.dataset.name, b.dataset.desc || '');
+    });
+  });
+})();
+</script>
+
+<!-- ====== CHECKOUT MODAL ====== -->
+<div class="checkout-overlay" id="checkoutOverlay">
+  <div class="checkout-drawer" id="checkoutDrawer">
+    <div class="checkout-handle"></div>
+    <button class="checkout-close" id="checkoutClose">✕</button>
+    <div class="checkout-title">Finalizar Pedido</div>
+
+    <!-- Tipo de pedido -->
+    <div class="checkout-section">
+      <div class="checkout-label">Como vai ser seu pedido?</div>
+      <div class="checkout-type-grid">
+        <button class="checkout-type-btn" data-type="local">
+          <span class="checkout-type-icon">🍽️</span>
+          <span class="checkout-type-name">Comer aqui</span>
+        </button>
+        <button class="checkout-type-btn" data-type="delivery">
+          <span class="checkout-type-icon">🛵</span>
+          <span class="checkout-type-name">Delivery</span>
+        </button>
+        <button class="checkout-type-btn" data-type="retirada">
+          <span class="checkout-type-icon">🛍️</span>
+          <span class="checkout-type-name">Retirar no balcão</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Nome -->
+    <div class="checkout-section checkout-hidden" id="checkoutNameSection">
+      <label class="checkout-label" for="checkoutName">Seu nome</label>
+      <input class="checkout-input" type="text" id="checkoutName" placeholder="Como podemos te chamar?" autocomplete="given-name">
+    </div>
+
+    <!-- Endereço (só delivery) -->
+    <div class="checkout-section checkout-hidden" id="checkoutAddressSection">
+      <div class="checkout-label">Endereço de entrega</div>
+      <input class="checkout-input" type="text" id="checkoutStreet" placeholder="Rua / Avenida" autocomplete="street-address">
+      <div class="checkout-row">
+        <input class="checkout-input" type="text" id="checkoutNumber" placeholder="Número">
+        <input class="checkout-input" type="text" id="checkoutNeighborhood" placeholder="Bairro">
+      </div>
+      <input class="checkout-input" type="text" id="checkoutComplement" placeholder="Complemento (opcional)" autocomplete="address-line2">
+      <input class="checkout-input" type="text" id="checkoutReference" placeholder="Ponto de referência (opcional)">
+    </div>
+
+    <!-- Pagamento -->
+    <div class="checkout-section checkout-hidden" id="checkoutPaymentSection">
+      <div class="checkout-label">Forma de pagamento</div>
+      <div class="checkout-payment-grid">
+        <button class="checkout-pay-btn" data-pay="pix">
+          <span>💠</span>PIX
+        </button>
+        <button class="checkout-pay-btn" data-pay="cartao">
+          <span>💳</span>Cartão
+        </button>
+        <button class="checkout-pay-btn" data-pay="dinheiro">
+          <span>💵</span>Dinheiro
+        </button>
+      </div>
+
+      <!-- PIX -->
+      <div class="checkout-pay-detail checkout-hidden" id="payPix">
+        <div class="pix-box">
+          <div class="pix-label">Chave PIX (celular)</div>
+          <div class="pix-key-row">
+            <span class="pix-key">(92) 99118-4420</span>
+            <button class="pix-copy-btn" id="pixCopyBtn">Copiar</button>
+          </div>
+          <p class="pix-hint">Faça o pagamento antes da entrega e envie o comprovante pelo WhatsApp.</p>
+        </div>
+      </div>
+
+      <!-- Cartão -->
+      <div class="checkout-pay-detail checkout-hidden" id="payCartao">
+        <div class="checkout-label" style="font-size:12px; margin-bottom:10px;">Tipo de cartão</div>
+        <div class="checkout-card-grid">
+          <button class="checkout-card-btn" data-card="credito">💳 Crédito</button>
+          <button class="checkout-card-btn" data-card="debito">💳 Débito</button>
+        </div>
+      </div>
+
+      <!-- Dinheiro -->
+      <div class="checkout-pay-detail checkout-hidden" id="payDinheiro">
+        <label class="checkout-label" style="font-size:12px;" for="checkoutTroco">Precisa de troco? Para quanto?</label>
+        <input class="checkout-input" type="text" id="checkoutTroco" placeholder="Ex: R$ 50,00 (deixe em branco se não precisar)" inputmode="decimal">
+      </div>
+    </div>
+
+    <!-- Confirmar -->
+    <div class="checkout-section checkout-hidden" id="checkoutConfirmSection">
+      <button class="checkout-confirm-btn" id="checkoutConfirmBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413"/>
+        </svg>
+        Confirmar e enviar pelo WhatsApp
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== CARRINHO ===== -->
+<button class="cart-fab" id="cartFab" aria-label="Ver carrinho">
+  <span>🛒 Carrinho</span>
+  <span class="cart-fab-count" id="cartFabCount">0</span>
+  <span class="cart-fab-total" id="cartFabTotal"></span>
+</button>
+
+<div class="cart-overlay" id="cartOverlay">
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-handle"></div>
+    <button class="cart-close" id="cartClose">✕</button>
+    <div class="cart-title">Seu Pedido</div>
+
+    <div class="cart-empty" id="cartEmpty">
+      <div class="cart-empty-icon">🛒</div>
+      <p>Seu carrinho está vazio.<br>Adicione itens do cardápio!</p>
+    </div>
+
+    <div class="cart-items" id="cartItems"></div>
+
+    <div class="cart-footer" id="cartFooter" style="display:none;">
+      <div class="cart-divider"></div>
+      <div class="cart-total-row">
+        <span class="cart-total-label">Subtotal</span>
+        <span id="cartSubtotal" style="font-weight:700;">R$ 0,00</span>
+      </div>
+      <div class="cart-total-row">
+        <span class="cart-total-label">Entrega</span>
+        <span style="font-weight:700; color: var(--green);">R$ 5,00</span>
+      </div>
+      <div class="cart-divider"></div>
+      <div class="cart-total-row">
+        <span class="cart-total-label main">Total</span>
+        <span class="cart-total-value" id="cartTotal">R$ 0,00</span>
+      </div>
+      <button class="cart-checkout-btn" id="cartCheckout">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413"/>
+        </svg>
+        Pedir pelo WhatsApp
+      </button>
+      <button class="cart-clear-btn" id="cartClear">Limpar carrinho</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ====== CHECKOUT MODAL JS ====== */
+(function() {
+  const overlay      = document.getElementById('checkoutOverlay');
+  const closeBtn     = document.getElementById('checkoutClose');
+  const nameSection  = document.getElementById('checkoutNameSection');
+  const addrSection  = document.getElementById('checkoutAddressSection');
+  const paySection   = document.getElementById('checkoutPaymentSection');
+  const confirmSec   = document.getElementById('checkoutConfirmSection');
+  const confirmBtn   = document.getElementById('checkoutConfirmBtn');
+  const pixCopyBtn   = document.getElementById('pixCopyBtn');
+
+  const PHONE    = '5592985672066';
+  const PIX_KEY  = '92991184420';
+  const FRETE    = 5.00;
+
+  let orderType     = null;
+  let paymentMethod = null;
+  let cardType      = null;
+
+  function show(el) { el.classList.remove('checkout-hidden'); }
+  function hide(el) { el.classList.add('checkout-hidden'); }
+  function fmt(v)   { return 'R$ ' + v.toFixed(2).replace('.', ','); }
+
+  function resetModal() {
+    orderType = null; paymentMethod = null; cardType = null;
+    document.querySelectorAll('.checkout-type-btn, .checkout-pay-btn, .checkout-card-btn')
+      .forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('.checkout-pay-detail').forEach(el => hide(el));
+    hide(nameSection); hide(addrSection); hide(paySection); hide(confirmSec);
+    ['checkoutName','checkoutStreet','checkoutNumber','checkoutNeighborhood',
+     'checkoutComplement','checkoutReference','checkoutTroco']
+      .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  }
+
+  function openCheckout() {
+    resetModal();
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCheckout() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  window.openCheckoutModal = openCheckout;
+
+  /* Tipo de pedido */
+  document.querySelectorAll('.checkout-type-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.checkout-type-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      orderType = btn.dataset.type;
+      show(nameSection);
+      orderType === 'delivery' ? show(addrSection) : hide(addrSection);
+      show(paySection);
+      show(confirmSec);
+    });
+  });
+
+  /* Forma de pagamento */
+  document.querySelectorAll('.checkout-pay-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.checkout-pay-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      paymentMethod = btn.dataset.pay;
+      cardType = null;
+      document.querySelectorAll('.checkout-pay-detail').forEach(el => hide(el));
+      document.querySelectorAll('.checkout-card-btn').forEach(b => b.classList.remove('selected'));
+      if (paymentMethod === 'pix')      show(document.getElementById('payPix'));
+      if (paymentMethod === 'cartao')   show(document.getElementById('payCartao'));
+      if (paymentMethod === 'dinheiro') show(document.getElementById('payDinheiro'));
+    });
+  });
+
+  /* Tipo de cartão */
+  document.querySelectorAll('.checkout-card-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.checkout-card-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      cardType = btn.dataset.card;
+    });
+  });
+
+  /* Copiar chave PIX */
+  pixCopyBtn.addEventListener('click', () => {
+    const copy = () => {
+      pixCopyBtn.textContent = 'Copiado! ✓';
+      setTimeout(() => { pixCopyBtn.textContent = 'Copiar'; }, 2500);
+    };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(PIX_KEY).then(copy);
+    } else {
+      const tmp = document.createElement('input');
+      tmp.value = PIX_KEY;
+      document.body.appendChild(tmp);
+      tmp.select();
+      document.execCommand('copy');
+      document.body.removeChild(tmp);
+      copy();
+    }
+  });
+
+  /* Confirmar pedido → WhatsApp */
+  confirmBtn.addEventListener('click', () => {
+    const name = document.getElementById('checkoutName').value.trim();
+    if (!orderType)     { alert('Selecione como vai ser seu pedido!'); return; }
+    if (!name)          { alert('Digite seu nome!'); document.getElementById('checkoutName').focus(); return; }
+    if (orderType === 'delivery') {
+      if (!document.getElementById('checkoutStreet').value.trim() ||
+          !document.getElementById('checkoutNumber').value.trim() ||
+          !document.getElementById('checkoutNeighborhood').value.trim()) {
+        alert('Preencha o endereço completo (rua, número e bairro)!'); return;
+      }
+    }
+    if (!paymentMethod) { alert('Selecione a forma de pagamento!'); return; }
+    if (paymentMethod === 'cartao' && !cardType) { alert('Selecione crédito ou débito!'); return; }
+
+    const cartItems = typeof window._getCartItems === 'function' ? window._getCartItems() : [];
+    const sub = cartItems.reduce((s, i) => s + i.price * i.qty, 0);
+
+    let msg = 'Oi! Quero fazer um pedido 😊\n\n';
+    msg += '*📋 PEDIDO*\n';
+    cartItems.forEach(item => {
+      const emoji = item.name.toLowerCase().includes('pizza') ? '🍕'
+                  : item.name.toLowerCase().includes('batata') ? '🍟' : '🍔';
+      const sizeStr = item.size ? ` (${item.size})` : '';
+      msg += `${emoji} ${item.name}${sizeStr} x${item.qty} — ${fmt(item.price * item.qty)}\n`;
+    });
+
+    const typeLabels = { local: '🍽️ Comer no local', delivery: '🛵 Delivery', retirada: '🛍️ Retirar no balcão' };
+    msg += `\n*📦 TIPO DE PEDIDO*\n${typeLabels[orderType]}\n`;
+
+    if (orderType === 'delivery') {
+      const street  = document.getElementById('checkoutStreet').value.trim();
+      const number  = document.getElementById('checkoutNumber').value.trim();
+      const hood    = document.getElementById('checkoutNeighborhood').value.trim();
+      const comp    = document.getElementById('checkoutComplement').value.trim();
+      const ref     = document.getElementById('checkoutReference').value.trim();
+      msg += `\n*📍 ENDEREÇO*\n${street}, ${number} — ${hood}`;
+      if (comp) msg += ` (${comp})`;
+      if (ref)  msg += `\nReferência: ${ref}`;
+      msg += '\n';
+    }
+
+    const payLabels = { pix: '💠 PIX', cartao: '💳 Cartão', dinheiro: '💵 Dinheiro' };
+    msg += `\n*💰 PAGAMENTO*\n${payLabels[paymentMethod]}`;
+    if (paymentMethod === 'cartao')   msg += ` (${cardType === 'credito' ? 'Crédito' : 'Débito'})`;
+    if (paymentMethod === 'dinheiro') {
+      const troco = document.getElementById('checkoutTroco').value.trim();
+      msg += troco ? `\nTroco para: ${troco}` : '\nSem troco';
+    }
+    msg += '\n';
+
+    if (orderType === 'delivery') {
+      msg += `\n📦 Frete: ${fmt(FRETE)}\n💰 *Total: ${fmt(sub + FRETE)}*`;
+    } else {
+      msg += `\n💰 *Total: ${fmt(sub)}*`;
+    }
+    msg += `\n\nNome: ${name}`;
+
+    window.open(`https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+    closeCheckout();
+    const cartOverlay = document.getElementById('cartOverlay');
+    if (cartOverlay) cartOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+
+  closeBtn.addEventListener('click', closeCheckout);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeCheckout(); });
+})();
+</script>
+
+</body>
+</html>
