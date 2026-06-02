@@ -762,11 +762,19 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   flex-wrap: nowrap;
   gap: 8px;
   justify-content: flex-start;
-  margin-bottom: 36px;
-  padding: 0 4px 4px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  position: sticky;
+  top: 68px;
+  z-index: 50;
+  background: var(--bg-0);
+  padding-top: 12px;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 .menu-filters::-webkit-scrollbar { display: none; }
 .filter-btn {
@@ -1531,31 +1539,31 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   </div>
   <div class="categories">
     <a href="#cardapio" class="cat-card reveal" data-filter="lanches">
-      <div class="cat-img"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80&auto=format&fit=crop" alt="Lanches" loading="lazy"></div>
+      <div class="cat-img"><img src="img/X-SALADA.png" alt="Lanches" loading="lazy"></div>
       <div class="cat-name">Lanches<small class="cat-count">Vários sabores</small></div>
     </a>
     <a href="#cardapio" class="cat-card reveal" data-filter="pizzas">
-      <div class="cat-img"><img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&q=80&auto=format&fit=crop" alt="Pizzas" loading="lazy"></div>
-      <div class="cat-name">Pizzas<small class="cat-count">Doces e salgadas</small></div>
+      <div class="cat-img"><img src="img/PIZZA MUSSARELA.jpg" alt="Pizzas" loading="lazy"></div>
+      <div class="cat-name">Pizzas<small class="cat-count">Salgadas e artesanais</small></div>
     </a>
     <a href="#cardapio" class="cat-card reveal" data-filter="misto">
-      <div class="cat-img"><img src="https://images.unsplash.com/photo-1528736235302-52922df5c122?w=600&q=80&auto=format&fit=crop" alt="Misto e Queijo" loading="lazy"></div>
+      <div class="cat-img"><img src="img/MISTO SIMPLES.jpg" alt="Misto e Queijo" loading="lazy"></div>
       <div class="cat-name">Misto/Queijo<small class="cat-count">Clássico e gostoso</small></div>
     </a>
     <a href="#cardapio" class="cat-card reveal" data-filter="kikao">
-      <div class="cat-img"><img src="https://images.unsplash.com/photo-1602030638412-bb8dcc0bc8b0?w=600&q=80&auto=format&fit=crop" alt="Kikão" loading="lazy"></div>
+      <div class="cat-img"><img src="img/KIKAO.jpg" alt="Kikão" loading="lazy"></div>
       <div class="cat-name">Kikão<small class="cat-count">Exclusivo da casa</small></div>
     </a>
     <a href="#cardapio" class="cat-card reveal" data-filter="batata">
-      <div class="cat-img"><img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&q=80&auto=format&fit=crop" alt="Batata Frita" loading="lazy"></div>
+      <div class="cat-img"><img src="img/BATATA FRITA GRANDE.jpg" alt="Batata Frita" loading="lazy"></div>
       <div class="cat-name">Batata Frita<small class="cat-count">Crocante por fora</small></div>
     </a>
     <a href="#cardapio" class="cat-card reveal" data-filter="refrigerantes">
-      <div class="cat-img"><img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=600&q=80&auto=format&fit=crop" alt="Refrigerantes" loading="lazy"></div>
+      <div class="cat-img"><img src="img/REFRIGERANTE COCA COLA.jpg" alt="Refrigerantes" loading="lazy"></div>
       <div class="cat-name">Refrigerantes<small class="cat-count">Lata, 1L e 2L</small></div>
     </a>
     <a href="#cardapio" class="cat-card reveal" data-filter="sucos">
-      <div class="cat-img"><img src="https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=600&q=80&auto=format&fit=crop" alt="Sucos" loading="lazy"></div>
+      <div class="cat-img"><img src="img/SUCO DE GOIABA.jpg" alt="Sucos" loading="lazy"></div>
       <div class="cat-name">Sucos<small class="cat-count">Naturais da região</small></div>
     </a>
   </div>
@@ -1584,7 +1592,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <!-- LANCHES -->
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Salada" loading="lazy">
+        <img src="img/X-SALADA.png" alt="X-Salada" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Salada</h3>
       <p class="menu-item-desc">Pão Bola, carne de hambúrguer, ovo, queijo mussarela, Presunto, Alface e tomate.</p>
@@ -1596,7 +1604,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Salada Acebolado" loading="lazy">
+        <img src="img/X-SALADA ACEBOLADO.png" alt="X-Salada Acebolado" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Salada Acebolado</h3>
       <p class="menu-item-desc">Pão Bola, carne de hambúrguer, ovo, cebola, queijo mussarela, Presunto, Alface e tomate.</p>
@@ -1609,7 +1617,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
         <span class="menu-item-badge">Especial</span>
-        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&q=80" alt="X-Salada Especial" loading="lazy">
+        <img src="img/X-SALADA ESPECIAL.png" alt="X-Salada Especial" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Salada Especial</h3>
       <p class="menu-item-desc">Pão Bola, 2 carnes de hambúrguer, ovo, queijo mussarela, Presunto, Alface e tomate.</p>
@@ -1621,7 +1629,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&q=80" alt="X-Salada Especial Acebolado" loading="lazy">
+        <img src="img/X-SALADA ESPECIAL ACEBOLADO.png" alt="X-Salada Especial Acebolado" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Salada Especial Acebolado</h3>
       <p class="menu-item-desc">Pão Bola, 2 carnes de hambúrguer, ovo, cebola, queijo mussarela, Presunto, Alface e tomate.</p>
@@ -1633,7 +1641,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Calabresa" loading="lazy">
+        <img src="img/X-CALABRESA.png" alt="X-Calabresa" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Calabresa</h3>
       <p class="menu-item-desc">Pão bola, carne de hambúrguer, calabresa, ovo, queijo mussarela, presunto, Alface e tomate.</p>
@@ -1645,7 +1653,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Calabresa Acebolado" loading="lazy">
+        <img src="img/X-CALABRESA ACEBOLADO.png" alt="X-Calabresa Acebolado" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Calabresa Acebolado</h3>
       <p class="menu-item-desc">Pão Bola, carne de hambúrguer, calabresa, cebola, ovo, queijo mussarela, presunto, Alface e tomate.</p>
@@ -1658,7 +1666,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
         <span class="menu-item-badge">Mais pedido</span>
-        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&q=80" alt="X-Bacon" loading="lazy">
+        <img src="img/X-BACON.jpg" alt="X-Bacon" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Bacon</h3>
       <p class="menu-item-desc">Pão Bola, carne de hambúrguer, Bacon, ovo, queijo mussarela, presunto, Alface e tomate.</p>
@@ -1670,7 +1678,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&q=80" alt="X-Bacon Acebolado" loading="lazy">
+        <img src="img/X-BACON ACEBOLADO.jpg" alt="X-Bacon Acebolado" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Bacon Acebolado</h3>
       <p class="menu-item-desc">Pão bola, carne de hambúrguer, Bacon, cebola, ovo, queijo mussarela, presunto, Alface e tomate.</p>
@@ -1682,7 +1690,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Salsicha" loading="lazy">
+        <img src="img/X-SALSICHA.jpg" alt="X-Salsicha" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Salsicha</h3>
       <p class="menu-item-desc">Pão bola, carne de hambúrguer, Salsicha, ovo, queijo mussarela, presunto, Alface e tomate.</p>
@@ -1694,7 +1702,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Egg" loading="lazy">
+        <img src="img/X-EGG.jpg" alt="X-Egg" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Egg</h3>
       <p class="menu-item-desc">Pão Bola, ovo, queijo mussarela, Presunto, Alface e tomate.</p>
@@ -1706,7 +1714,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Maionese" loading="lazy">
+        <img src="img/X-MAIONESE.png" alt="X-Maionese" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Maionese</h3>
       <p class="menu-item-desc">Pão Bola, carne de hambúrguer, queijo mussarela, Presunto, Alface e tomate.</p>
@@ -1718,7 +1726,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Burguer" loading="lazy">
+        <img src="img/X-BURGUER.jpg" alt="X-Burguer" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Burguer</h3>
       <p class="menu-item-desc">Pão Bola, carne de hambúrguer, queijo mussarela, Alface e tomate.</p>
@@ -1730,7 +1738,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="X-Americano" loading="lazy">
+        <img src="img/X-AMERICANO.jpg" alt="X-Americano" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Americano</h3>
       <p class="menu-item-desc">3 pães de forma, ovo, queijo mussarela, presunto, Alface e tomate.</p>
@@ -1743,7 +1751,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
         <span class="menu-item-badge">Exclusivo</span>
-        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&q=80" alt="X-Ágape" loading="lazy">
+        <img src="img/X-AGAPE.jpg" alt="X-Ágape" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Ágape</h3>
       <p class="menu-item-desc">3 pães de forma, carne de hambúrguer, ovo, Bacon, Calabresa, queijo mussarela, Presunto, Alface e tomate.</p>
@@ -1756,7 +1764,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
         <span class="menu-item-badge">Especial</span>
-        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&q=80" alt="X-Ágape Acebolado" loading="lazy">
+        <img src="img/X-AGAPE ACEBOLADO.jpg" alt="X-Ágape Acebolado" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Ágape Acebolado</h3>
       <p class="menu-item-desc">3 pães de forma, carne de hambúrguer, ovo, Bacon, Calabresa, cebola, queijo mussarela, Presunto, Alface e tomate.</p>
@@ -1769,7 +1777,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
         <span class="menu-item-badge">Especial</span>
-        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&q=80" alt="X-Tudo" loading="lazy">
+        <img src="img/X-TUDO.jpg" alt="X-Tudo" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Tudo</h3>
       <p class="menu-item-desc">Pão Bola, carne, Bacon, Calabresa, Salsicha, ovo, queijo mussarela, Presunto, Alface e tomate.</p>
@@ -1782,7 +1790,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
         <span class="menu-item-badge">Especial</span>
-        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&q=80" alt="X-Tudo Acebolado" loading="lazy">
+        <img src="img/X-TUDO ACEBOLADO.jpg" alt="X-Tudo Acebolado" loading="lazy">
       </div>
       <h3 class="menu-item-name">X-Tudo Acebolado</h3>
       <p class="menu-item-desc">Pão Bola, carne, Bacon, Calabresa, Salsicha, ovo, cebola, queijo mussarela, Presunto, Alface e tomate.</p>
@@ -1794,7 +1802,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="lanches">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80" alt="Hambúrguer" loading="lazy">
+        <img src="img/HAMBURGUER.jpg" alt="Hambúrguer" loading="lazy">
       </div>
       <h3 class="menu-item-name">Hambúrguer</h3>
       <p class="menu-item-desc">Pão bola, carne de hambúrguer, Alface e tomate.</p>
@@ -1807,7 +1815,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <!-- PIZZAS -->
     <article class="menu-item reveal" data-cat="pizzas">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Mussarela" loading="lazy">
+        <img src="img/PIZZA MUSSARELA.jpg" alt="Pizza Mussarela" loading="lazy">
       </div>
       <h3 class="menu-item-name">Pizza Mussarela</h3>
       <p class="menu-item-desc">Queijo Mussarela, Tomate, azeitona e orégano.</p>
@@ -1819,7 +1827,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="pizzas">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Calabresa" loading="lazy">
+        <img src="img/PIZZA CALABRESA.jpg" alt="Pizza Calabresa" loading="lazy">
       </div>
       <h3 class="menu-item-name">Pizza Calabresa</h3>
       <p class="menu-item-desc">Queijo Mussarela, Calabresa, Cebola, azeitona e orégano.</p>
@@ -1831,7 +1839,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="pizzas">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=700&q=80" alt="Pizza Portuguesa" loading="lazy">
+        <img src="img/PIZZA PORTUGUESA.jpg" alt="Pizza Portuguesa" loading="lazy">
       </div>
       <h3 class="menu-item-name">Pizza Portuguesa</h3>
       <p class="menu-item-desc">Queijo Mussarela, Presunto, milho, ervilha, ovo, tomate, pimentão, azeitona e orégano.</p>
@@ -1843,7 +1851,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="pizzas">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Napolitana" loading="lazy">
+        <img src="img/PIZZA NAPOLITANA.jpg" alt="Pizza Napolitana" loading="lazy">
       </div>
       <h3 class="menu-item-name">Pizza Napolitana</h3>
       <p class="menu-item-desc">Queijo Mussarela, Presunto, ovo, tomate, azeitona e orégano.</p>
@@ -1855,7 +1863,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="pizzas">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Presunto" loading="lazy">
+        <img src="img/PIZZA DE PRESUNTO.jpg" alt="Pizza Presunto" loading="lazy">
       </div>
       <h3 class="menu-item-name">Pizza Presunto</h3>
       <p class="menu-item-desc">Queijo Mussarela, Presunto, tomate, azeitona e orégano.</p>
@@ -1867,7 +1875,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="pizzas">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=700&q=80" alt="Pizza Catupiry" loading="lazy">
+        <img src="img/PIZZA DE CATUPIRY.jpg" alt="Pizza Catupiry" loading="lazy">
       </div>
       <h3 class="menu-item-name">Pizza Catupiry</h3>
       <p class="menu-item-desc">Queijo Mussarela, Catupiry, tomate, azeitona e orégano.</p>
@@ -1880,7 +1888,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="pizzas">
       <div class="menu-item-img">
         <span class="menu-item-badge">Especial</span>
-        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Quatro Queijo" loading="lazy">
+        <img src="img/PIZZA QUATRO QUEIJOS.jpg" alt="Pizza Quatro Queijo" loading="lazy">
       </div>
       <h3 class="menu-item-name">Pizza Quatro Queijo</h3>
       <p class="menu-item-desc">Queijo Mussarela, Catupiry, queijo Cheddar, Queijo parmesão, tomate, azeitona e orégano.</p>
@@ -1893,7 +1901,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="pizzas">
       <div class="menu-item-img">
         <span class="menu-item-badge">Especial</span>
-        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Calabresa Especial" loading="lazy">
+        <img src="img/PIZZA CALABRESA ESPECIAL.jpg" alt="Pizza Calabresa Especial" loading="lazy">
       </div>
       <h3 class="menu-item-name">Pizza Calabresa Especial</h3>
       <p class="menu-item-desc">Queijo Mussarela, Calabresa, Catupiry, Cebola, tomate, azeitona e orégano.</p>
@@ -1906,7 +1914,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="pizzas">
       <div class="menu-item-img">
         <span class="menu-item-badge">Especial</span>
-        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=700&q=80" alt="Pizza Portuguesa Especial" loading="lazy">
+        <img src="img/PIZZA PORTUGUESA ESPECIAL.jpg" alt="Pizza Portuguesa Especial" loading="lazy">
       </div>
       <h3 class="menu-item-name">Pizza Portuguesa Especial</h3>
       <p class="menu-item-desc">Queijo Mussarela, Calabresa, presunto, milho, ervilha, ovo, tomate, pimentão, azeitona e orégano.</p>
@@ -1918,7 +1926,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="pizzas">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=700&q=80" alt="Pizza Frango" loading="lazy">
+        <img src="img/PIZZA FRANGO.jpg" alt="Pizza Frango" loading="lazy">
       </div>
       <h3 class="menu-item-name">Pizza Frango</h3>
       <p class="menu-item-desc">Queijo Mussarela, Frango, milho, ervilha, tomate, pimentão, azeitona e orégano.</p>
@@ -1930,7 +1938,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="pizzas">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Bacon" loading="lazy">
+        <img src="img/PIZZA BACON.jpg" alt="Pizza Bacon" loading="lazy">
       </div>
       <h3 class="menu-item-name">Pizza Bacon</h3>
       <p class="menu-item-desc">Queijo Mussarela, Bacon, Cebola, tomate, azeitona e orégano.</p>
@@ -1943,7 +1951,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="pizzas">
       <div class="menu-item-img">
         <span class="menu-item-badge">Exclusivo</span>
-        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=700&q=80" alt="Pizza Frango com Catupiry" loading="lazy">
+        <img src="img/PIZZA FRANGO CATUPIRY.jpg" alt="Pizza Frango com Catupiry" loading="lazy">
       </div>
       <h3 class="menu-item-name">Pizza Frango com Catupiry</h3>
       <p class="menu-item-desc">Queijo Mussarela, Frango, Catupiry, milho, ervilha, tomate, pimentão, azeitona e orégano.</p>
@@ -1956,7 +1964,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="pizzas">
       <div class="menu-item-img">
         <span class="menu-item-badge">Especial</span>
-        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Bacon Especial" loading="lazy">
+        <img src="img/PIZZA BACON ESPECIAL.jpg" alt="Pizza Bacon Especial" loading="lazy">
       </div>
       <h3 class="menu-item-name">Pizza Bacon Especial</h3>
       <p class="menu-item-desc">Queijo Mussarela, Bacon, queijo Cheddar, Cebola, tomate, azeitona e orégano.</p>
@@ -1969,7 +1977,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="pizzas">
       <div class="menu-item-img">
         <span class="menu-item-badge">Exclusivo</span>
-        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza À Moda da Casa" loading="lazy">
+        <img src="img/PIZZA MODA DA CASA.jpg" alt="Pizza À Moda da Casa" loading="lazy">
       </div>
       <h3 class="menu-item-name">Pizza À Moda da Casa</h3>
       <p class="menu-item-desc">Queijo Mussarela, Bacon, calabresa, Cebola, queijo parmesão, tomate, azeitona e orégano.</p>
@@ -1981,7 +1989,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="pizzas">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80" alt="Pizza Carne" loading="lazy">
+        <img src="img/PIZZA DE CARNE.jpg" alt="Pizza Carne" loading="lazy">
       </div>
       <h3 class="menu-item-name">Pizza Carne</h3>
       <p class="menu-item-desc">Queijo Mussarela, Carne, Cebola, pimentão, tomate, azeitona e orégano.</p>
@@ -1994,7 +2002,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <!-- MISTO/QUEIJO -->
     <article class="menu-item reveal" data-cat="misto">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1528736235302-52922df5c122?w=700&q=80" alt="Mixto Simples" loading="lazy">
+        <img src="img/MISTO SIMPLES.jpg" alt="Mixto Simples" loading="lazy">
       </div>
       <h3 class="menu-item-name">Mixto Simples</h3>
       <p class="menu-item-desc">2 Pães de forma, queijo mussarela, presunto.</p>
@@ -2007,7 +2015,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="misto">
       <div class="menu-item-img">
         <span class="menu-item-badge">Duplo</span>
-        <img src="https://images.unsplash.com/photo-1528736235302-52922df5c122?w=700&q=80" alt="Mixto Duplo" loading="lazy">
+        <img src="img/MISTO DUPLO.jpg" alt="Mixto Duplo" loading="lazy">
       </div>
       <h3 class="menu-item-name">Mixto Duplo</h3>
       <p class="menu-item-desc">3 Pães de forma, 2 queijo mussarela, 2 presunto.</p>
@@ -2019,7 +2027,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="misto">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1509722747041-616f39b57569?w=700&q=80" alt="Queijo Simples" loading="lazy">
+        <img src="img/QUEIJO SIMPLES.jpg" alt="Queijo Simples" loading="lazy">
       </div>
       <h3 class="menu-item-name">Queijo Simples</h3>
       <p class="menu-item-desc">2 Pães de forma, queijo mussarela.</p>
@@ -2032,7 +2040,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="misto">
       <div class="menu-item-img">
         <span class="menu-item-badge">Duplo</span>
-        <img src="https://images.unsplash.com/photo-1509722747041-616f39b57569?w=700&q=80" alt="Queijo Duplo" loading="lazy">
+        <img src="img/QUEIJO DUPLO.jpg" alt="Queijo Duplo" loading="lazy">
       </div>
       <h3 class="menu-item-name">Queijo Duplo</h3>
       <p class="menu-item-desc">3 Pães de forma, 2 queijo mussarela.</p>
@@ -2045,7 +2053,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <!-- KIKÃO -->
     <article class="menu-item reveal" data-cat="kikao">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1602030638412-bb8dcc0bc8b0?w=700&q=80" alt="Kikão Simples" loading="lazy">
+        <img src="img/KIKAO.jpg" alt="Kikão Simples" loading="lazy">
       </div>
       <h3 class="menu-item-name">Kikão Simples</h3>
       <p class="menu-item-desc">Pão, salsicha, molho, maionese, catchup, batata palha e queijo ralado.</p>
@@ -2058,7 +2066,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="kikao">
       <div class="menu-item-img">
         <span class="menu-item-badge">Especial</span>
-        <img src="https://images.unsplash.com/photo-1602030638412-bb8dcc0bc8b0?w=700&q=80" alt="Kikão Especial" loading="lazy">
+        <img src="img/KIKÃO ESPECIAL.jpg" alt="Kikão Especial" loading="lazy">
       </div>
       <h3 class="menu-item-name">Kikão Especial</h3>
       <p class="menu-item-desc">Pão, salsicha, molho, Bacon, maionese, catchup, batata palha, queijo ralado e queijo mussarela.</p>
@@ -2071,7 +2079,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="kikao">
       <div class="menu-item-img">
         <span class="menu-item-badge">Exclusivo</span>
-        <img src="https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=700&q=80" alt="Kikão Turbinado" loading="lazy">
+        <img src="img/KIKÃO TURBINADO.jpg" alt="Kikão Turbinado" loading="lazy">
       </div>
       <h3 class="menu-item-name">Kikão Turbinado</h3>
       <p class="menu-item-desc">Pão, salsicha, molho, Bacon, calabresa, maionese, catchup, batata palha, queijo ralado e queijo mussarela.</p>
@@ -2085,7 +2093,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="batata">
       <div class="menu-item-img">
         <span class="menu-item-badge">Crocante</span>
-        <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=700&q=80" alt="Batata Frita Pequena" loading="lazy">
+        <img src="img/BATATA FRITA PEQUENA.jpg" alt="Batata Frita Pequena" loading="lazy">
       </div>
       <h3 class="menu-item-name">Porção Pequena</h3>
       <p class="menu-item-desc">Batata frita crocante, temperada e quentinha.</p>
@@ -2098,7 +2106,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <article class="menu-item reveal" data-cat="batata">
       <div class="menu-item-img">
         <span class="menu-item-badge">Grande</span>
-        <img src="https://images.unsplash.com/photo-1630431341973-02e1b662ec35?w=700&q=80" alt="Batata Frita Grande" loading="lazy">
+        <img src="img/BATATA FRITA GRANDE.jpg" alt="Batata Frita Grande" loading="lazy">
       </div>
       <h3 class="menu-item-name">Porção Grande</h3>
       <p class="menu-item-desc">Porção generosa de batata frita crocante, ideal para compartilhar.</p>
@@ -2111,7 +2119,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <!-- REFRIGERANTES -->
     <article class="menu-item reveal" data-cat="refrigerantes">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Coca-Cola" loading="lazy">
+        <img src="img/REFRIGERANTE COCA COLA.jpg" alt="Coca-Cola" loading="lazy">
       </div>
       <h3 class="menu-item-name">Coca-Cola</h3>
       <p class="menu-item-desc">Lata · 1 Litro · 1,5 Litro · 2 Litros</p>
@@ -2123,7 +2131,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="refrigerantes">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Fanta Laranja" loading="lazy">
+        <img src="img/REFRIGERANTE FANTA LARANJA.png" alt="Fanta Laranja" loading="lazy">
       </div>
       <h3 class="menu-item-name">Fanta Laranja</h3>
       <p class="menu-item-desc">Lata · 1 Litro · 2 Litros</p>
@@ -2135,7 +2143,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="refrigerantes">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Fanta Uva" loading="lazy">
+        <img src="img/REFRIGERANTE FANTA UVA.png" alt="Fanta Uva" loading="lazy">
       </div>
       <h3 class="menu-item-name">Fanta Uva</h3>
       <p class="menu-item-desc">Lata · 1,5 Litro · 2 Litros</p>
@@ -2147,7 +2155,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="refrigerantes">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Pepsi" loading="lazy">
+        <img src="img/REFRIGERANTE PEPSI.jpg" alt="Pepsi" loading="lazy">
       </div>
       <h3 class="menu-item-name">Pepsi</h3>
       <p class="menu-item-desc">Lata · 1 Litro · 2 Litros</p>
@@ -2159,7 +2167,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="refrigerantes">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Antártica" loading="lazy">
+        <img src="img/REFRIGERANTE ANTARTICA.jpg" alt="Antártica" loading="lazy">
       </div>
       <h3 class="menu-item-name">Antártica</h3>
       <p class="menu-item-desc">Lata · 1 Litro · 2 Litros</p>
@@ -2171,7 +2179,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="refrigerantes">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Baré" loading="lazy">
+        <img src="img/REFRIGERANTE BARÉ.jpg" alt="Baré" loading="lazy">
       </div>
       <h3 class="menu-item-name">Baré</h3>
       <p class="menu-item-desc">1 Litro · 2 Litros</p>
@@ -2183,19 +2191,19 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="refrigerantes">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Tuxaua" loading="lazy">
+        <img src="img/REFRIGERANTE TUCHAUA.jpg" alt="Tuchaua" loading="lazy">
       </div>
-      <h3 class="menu-item-name">Tuxaua</h3>
+      <h3 class="menu-item-name">Tuchaua</h3>
       <p class="menu-item-desc">Gelado · 1 Litro</p>
       <div class="menu-item-foot">
         <div class="menu-item-price"><small>R$</small> 5,00</div>
-        <button class="menu-item-add" data-name="Tuxaua" aria-label="Adicionar">+</button>
+        <button class="menu-item-add" data-name="Tuchaua" aria-label="Adicionar">+</button>
       </div>
     </article>
 
     <article class="menu-item reveal" data-cat="refrigerantes">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Magistral" loading="lazy">
+        <img src="img/REFRIGERANTE MAGISTRAL.png" alt="Magistral" loading="lazy">
       </div>
       <h3 class="menu-item-name">Magistral</h3>
       <p class="menu-item-desc">Gelado · 1 Litro</p>
@@ -2207,7 +2215,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="refrigerantes">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=700&q=80" alt="Regente" loading="lazy">
+        <img src="img/REFRIGERANTE REGENTE.png" alt="Regente" loading="lazy">
       </div>
       <h3 class="menu-item-name">Regente</h3>
       <p class="menu-item-desc">Gelado · 1 Litro</p>
@@ -2220,7 +2228,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <!-- SUCOS -->
     <article class="menu-item reveal" data-cat="sucos">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=700&q=80" alt="Suco de Goiaba" loading="lazy">
+        <img src="img/SUCO DE GOIABA.jpg" alt="Suco de Goiaba" loading="lazy">
       </div>
       <h3 class="menu-item-name">Suco de Goiaba</h3>
       <p class="menu-item-desc">Natural · 400ml · 500ml · 1 Litro. Com leite +R$ 2,00.</p>
@@ -2232,7 +2240,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="sucos">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=700&q=80" alt="Suco de Maracujá" loading="lazy">
+        <img src="img/SUCO DE MARACUJA.jpg" alt="Suco de Maracujá" loading="lazy">
       </div>
       <h3 class="menu-item-name">Suco de Maracujá</h3>
       <p class="menu-item-desc">Natural · 400ml · 500ml · 1 Litro. Com leite +R$ 2,00.</p>
@@ -2244,7 +2252,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="sucos">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=700&q=80" alt="Suco de Cupuaçu" loading="lazy">
+        <img src="img/SUCO DE CUPUAÇU.png" alt="Suco de Cupuaçu" loading="lazy">
       </div>
       <h3 class="menu-item-name">Suco de Cupuaçu</h3>
       <p class="menu-item-desc">Natural · 400ml · 500ml · 1 Litro. Com leite +R$ 2,00.</p>
@@ -2256,7 +2264,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="sucos">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=700&q=80" alt="Suco de Taperebá" loading="lazy">
+        <img src="img/SUCO DE TAPEREBA.png" alt="Suco de Taperebá" loading="lazy">
       </div>
       <h3 class="menu-item-name">Suco de Taperebá</h3>
       <p class="menu-item-desc">Natural · 400ml · 500ml · 1 Litro. Com leite +R$ 2,00.</p>
@@ -2268,7 +2276,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
     <article class="menu-item reveal" data-cat="sucos">
       <div class="menu-item-img">
-        <img src="https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=700&q=80" alt="Suco de Graviola" loading="lazy">
+        <img src="img/SUCO DE GRAVIOLA.png" alt="Suco de Graviola" loading="lazy">
       </div>
       <h3 class="menu-item-name">Suco de Graviola</h3>
       <p class="menu-item-desc">Natural · 400ml · 500ml · 1 Litro. Com leite +R$ 2,00.</p>
