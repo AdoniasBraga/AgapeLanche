@@ -3174,8 +3174,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const troco = document.getElementById('checkoutTroco').value.trim();
       payStr = troco ? 'din-' + troco.replace(/[^\d,\.]/g,'') : 'din';
     }
-    const frete = orderType === 'delivery' ? FRETE : 0;
-    const total  = orderType === 'delivery' ? sub + FRETE : sub;
+    const frete   = orderType === 'delivery' ? FRETE : 0;
+    const total   = orderType === 'delivery' ? sub + FRETE : sub;
     const itemsStr = cartItems.map(i => {
       const n = i.size ? i.name + ' (' + i.size + ')' : i.name;
       return encodeURIComponent(n) + ';' + i.qty + ';' + i.price.toFixed(2);
@@ -3189,13 +3189,12 @@ document.addEventListener('DOMContentLoaded', function() {
           document.getElementById('checkoutReference').value.trim()
         ].filter(Boolean).join(' '))
       : '';
-    const compact  = encodeURIComponent(name) + '~' + typeMap[orderType] + '~' + payStr + '~' + frete + '~' + total.toFixed(2) + '~' + itemsStr + '~' + addrStr;
-    const notaURL  = 'https://oliveiralincoln-dev.github.io/agape-lanche/nota.html#' + compact;
+    const compact = encodeURIComponent(name) + '~' + typeMap[orderType] + '~' + payStr + '~' + frete + '~' + total.toFixed(2) + '~' + itemsStr + '~' + addrStr;
+    const notaURL = 'https://oliveiralincoln-dev.github.io/agape-lanche/nota.html#' + compact;
 
     msg += '\n\n🧾 *Ver pedido:* ' + notaURL;
 
     window.open('https://wa.me/' + PHONE + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
-    window.open(notaURL, '_blank', 'noopener');
 
     closeCheckout();
     const cartOverlay = document.getElementById('cartOverlay');

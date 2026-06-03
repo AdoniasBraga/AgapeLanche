@@ -230,7 +230,7 @@ body {
   var nota = document.getElementById('nota');
 
   try {
-    const raw    = window.location.hash.slice(1);
+    const raw = window.location.hash.slice(1);
     if (!raw) throw new Error('vazio');
     const parts  = raw.split('~');
     const name   = decodeURIComponent(parts[0] || '');
@@ -243,11 +243,13 @@ body {
       const [n, q, p] = seg.split(';');
       return { name: decodeURIComponent(n || ''), qty: parseInt(q) || 1, price: parseFloat(p) || 0 };
     });
-    const addr   = decodeURIComponent(parts[6] || '');
-
+    const addr = decodeURIComponent(parts[6] || '');
     const typeLabels = { d: 'Delivery', l: 'Comer no local', r: 'Retirar no balcão' };
     const payLabels  = {
-      pix: 'PIX', 'cart-cr': 'Cartão Crédito', 'cart-db': 'Cartão Débito', din: 'Dinheiro'
+      'pix': 'PIX',
+      'cart-cr': 'Cartão Crédito',
+      'cart-db': 'Cartão Débito',
+      'din': 'Dinheiro'
     };
     const payLabel = payLabels[pay] || (pay.startsWith('din-') ? 'Dinheiro (troco p/ R$ ' + pay.slice(4) + ')' : pay);
 
@@ -339,7 +341,7 @@ body {
     nota.appendChild(footer);
 
   } catch(e) {
-    nota.innerHTML = '<p style="text-align:center;color:#999;padding:2rem;">Pedido não encontrado.</p>';
+    document.getElementById('nota').innerHTML = '<p style="text-align:center;color:#999;padding:2rem;">Pedido não encontrado.</p>';
   }
 })();
 </script>
