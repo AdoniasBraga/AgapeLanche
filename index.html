@@ -871,7 +871,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   font-family: 'Manrope', sans-serif;
   font-size: 26px;
   font-weight: 800;
-  color: var(--gold);
+  color: #D52B1E;
   letter-spacing: -0.01em;
   line-height: 1;
 }
@@ -1137,7 +1137,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 }
 .pizza-size-name { font-weight: 700; color: var(--text); }
 .pizza-size-desc { font-size: 13px; color: var(--text-dim); margin-top: 2px; }
-.pizza-size-price { font-weight: 800; color: var(--gold); font-size: 18px; flex-shrink: 0; margin-left: 12px; }
+.pizza-size-price { font-weight: 800; color: #D52B1E; font-size: 18px; flex-shrink: 0; margin-left: 12px; }
 .pizza-modal-confirm {
   width: 100%;
   padding: 18px;
@@ -1293,7 +1293,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 }
 .cart-item-price {
   font-weight: 800;
-  color: var(--gold);
+  color: #D52B1E;
   font-size: 15px;
   white-space: nowrap;
 }
@@ -3167,6 +3167,31 @@ document.addEventListener('DOMContentLoaded', function() {
     msg += `\n*Total: ${fmt(orderType === 'delivery' ? sub + FRETE : sub)}*`;
 
     window.open(`https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+
+    // Gerar nota de pedido
+    const pedidoData = {
+      id: Date.now().toString().slice(-4),
+      dt: new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}),
+      name: name,
+      type: orderType,
+      items: cartItems.map(i => ({ name: i.name, size: i.size || null, qty: i.qty, price: i.price })),
+      sub: sub,
+      frete: orderType === 'delivery' ? FRETE : 0,
+      total: orderType === 'delivery' ? sub + FRETE : sub,
+      address: orderType === 'delivery' ? {
+        street: document.getElementById('checkoutStreet').value.trim(),
+        number: document.getElementById('checkoutNumber').value.trim(),
+        hood:   document.getElementById('checkoutNeighborhood').value.trim(),
+        comp:   document.getElementById('checkoutComplement').value.trim(),
+        ref:    document.getElementById('checkoutReference').value.trim()
+      } : null,
+      pay: paymentMethod,
+      card: cardType || null,
+      troco: paymentMethod === 'dinheiro' ? document.getElementById('checkoutTroco').value.trim() : ''
+    };
+    const hash = btoa(unescape(encodeURIComponent(JSON.stringify(pedidoData))));
+    window.open('nota.html#' + hash, '_blank', 'noopener');
+
     closeCheckout();
     const cartOverlay = document.getElementById('cartOverlay');
     if (cartOverlay) cartOverlay.classList.remove('open');

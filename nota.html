@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nota do Pedido — Ágape Lanche & Pizzaria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px 48px;
+  min-height: 100vh;
+}
+
+.nota {
+  background: #fff;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+}
+
+/* ── Cabeçalho ── */
+.nota-header {
+  background: #D52B1E;
+  padding: 24px 20px 20px;
+  text-align: center;
+}
+.nota-brand {
+  font-size: 13px;
+  font-weight: 800;
+  color: #FDC82F;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.nota-titulo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+}
+.nota-meta {
+  font-size: 12px;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.6;
+}
+
+/* ── Seções ── */
+.nota-section {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.nota-section:last-of-type { border-bottom: none; }
+
+.nota-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #999;
+  margin-bottom: 10px;
+}
+
+/* ── Itens ── */
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 0;
+  border-bottom: 1px dashed #eee;
+}
+.item-row:last-child { border-bottom: none; }
+
+.item-nome {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a0a00;
+  flex: 1;
+}
+.item-tamanho {
+  font-size: 11px;
+  color: #888;
+  font-weight: 400;
+}
+.item-qty {
+  font-size: 12px;
+  color: #888;
+  white-space: nowrap;
+  margin: 0 8px;
+}
+.item-preco {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a0a00;
+  white-space: nowrap;
+}
+
+/* ── Totais ── */
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #555;
+  padding: 4px 0;
+}
+.total-row.total-final {
+  font-size: 16px;
+  font-weight: 800;
+  color: #D52B1E;
+  padding-top: 10px;
+  margin-top: 6px;
+  border-top: 2px solid #f0f0f0;
+}
+
+/* ── Endereço ── */
+.endereco-bloco {
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #444;
+  line-height: 1.6;
+}
+
+/* ── Pagamento ── */
+.pag-valor {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a0a00;
+}
+.pag-troco {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+/* ── Botão imprimir ── */
+.print-area {
+  padding: 20px;
+  text-align: center;
+}
+.btn-print {
+  display: inline-block;
+  background: #D52B1E;
+  color: #fff;
+  border: none;
+  border-radius: 100px;
+  padding: 14px 32px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-print:hover { background: #b8241a; }
+.print-hint {
+  margin-top: 10px;
+  font-size: 11px;
+  color: #aaa;
+}
+
+/* ── Rodapé ── */
+.nota-footer {
+  text-align: center;
+  padding: 16px 20px 24px;
+  font-size: 13px;
+  color: #888;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* ── Erro ── */
+.erro {
+  text-align: center;
+  padding: 48px 24px;
+  color: #888;
+  font-size: 15px;
+}
+
+/* ── Impressão ── */
+@media print {
+  body {
+    background: #fff;
+    padding: 0;
+  }
+  .nota {
+    max-width: 58mm;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .nota-header {
+    background: #000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .nota-brand { color: #fff !important; }
+  .btn-print  { display: none !important; }
+  .print-hint { display: none !important; }
+  * {
+    font-size: 10px !important;
+    line-height: 1.4 !important;
+  }
+  .nota-titulo { font-size: 12px !important; }
+  .nota-brand  { font-size: 10px !important; }
+  .total-row.total-final { font-size: 12px !important; }
+  @page { margin: 0; size: 58mm auto; }
+}
+</style>
+</head>
+<body>
+<div class="nota" id="nota">
+  <div class="erro" id="erroMsg" style="display:none;">Pedido não encontrado.</div>
+</div>
+
+<script>
+(function () {
+  function fmt(v) {
+    return 'R$ ' + v.toFixed(2).replace('.', ',');
+  }
+
+  function payLabel(pay, card) {
+    if (pay === 'pix')      return 'PIX';
+    if (pay === 'dinheiro') return 'Dinheiro';
+    if (pay === 'cartao')   return 'Cartão' + (card ? ' (' + (card === 'credito' ? 'Crédito' : 'Débito') + ')' : '');
+    return pay;
+  }
+
+  var hash = window.location.hash.slice(1);
+  var nota = document.getElementById('nota');
+  var erro = document.getElementById('erroMsg');
+
+  if (!hash) {
+    erro.style.display = 'block';
+    return;
+  }
+
+  var d;
+  try {
+    d = JSON.parse(decodeURIComponent(escape(atob(hash))));
+  } catch (e) {
+    erro.style.display = 'block';
+    return;
+  }
+
+  // ── Cabeçalho ──
+  var header = document.createElement('div');
+  header.className = 'nota-header';
+  header.innerHTML =
+    '<div class="nota-brand">Ágape Lanche &amp; Pizzaria</div>' +
+    '<div class="nota-titulo">Confirmação de Pedido</div>' +
+    '<div class="nota-meta">Pedido #' + d.id + '<br>' + d.dt + '</div>';
+  nota.appendChild(header);
+
+  // ── Itens ──
+  var secItens = document.createElement('div');
+  secItens.className = 'nota-section';
+  secItens.innerHTML = '<div class="nota-section-title">Itens do Pedido</div>';
+  d.items.forEach(function (item) {
+    var row = document.createElement('div');
+    row.className = 'item-row';
+    var tamanho = item.size ? '<span class="item-tamanho"> (' + item.size + ')</span>' : '';
+    row.innerHTML =
+      '<div class="item-nome">' + item.name + tamanho + '</div>' +
+      '<span class="item-qty">x' + item.qty + '</span>' +
+      '<div class="item-preco">' + fmt(item.price * item.qty) + '</div>';
+    secItens.appendChild(row);
+  });
+  nota.appendChild(secItens);
+
+  // ── Totais ──
+  var secTotais = document.createElement('div');
+  secTotais.className = 'nota-section';
+  secTotais.innerHTML = '<div class="nota-section-title">Valores</div>';
+
+  var rowSub = document.createElement('div');
+  rowSub.className = 'total-row';
+  rowSub.innerHTML = '<span>Subtotal</span><span>' + fmt(d.sub) + '</span>';
+  secTotais.appendChild(rowSub);
+
+  if (d.type === 'delivery') {
+    var rowFrete = document.createElement('div');
+    rowFrete.className = 'total-row';
+    rowFrete.innerHTML = '<span>Frete</span><span>' + fmt(d.frete) + '</span>';
+    secTotais.appendChild(rowFrete);
+  }
+
+  var rowTotal = document.createElement('div');
+  rowTotal.className = 'total-row total-final';
+  rowTotal.innerHTML = '<span>Total</span><span>' + fmt(d.total) + '</span>';
+  secTotais.appendChild(rowTotal);
+  nota.appendChild(secTotais);
+
+  // ── Endereço (só delivery) ──
+  if (d.type === 'delivery' && d.address) {
+    var a = d.address;
+    var secEnd = document.createElement('div');
+    secEnd.className = 'nota-section';
+    var endTexto = a.street + ', ' + a.number + ' — ' + a.hood;
+    if (a.comp) endTexto += '<br>Complemento: ' + a.comp;
+    if (a.ref)  endTexto += '<br>Referência: ' + a.ref;
+    secEnd.innerHTML =
+      '<div class="nota-section-title">Endereço de Entrega</div>' +
+      '<div class="endereco-bloco">' + endTexto + '</div>';
+    nota.appendChild(secEnd);
+  }
+
+  // ── Pagamento ──
+  var secPag = document.createElement('div');
+  secPag.className = 'nota-section';
+  var pagHtml =
+    '<div class="nota-section-title">Pagamento</div>' +
+    '<div class="pag-valor">' + payLabel(d.pay, d.card) + '</div>';
+  if (d.pay === 'dinheiro' && d.troco) {
+    pagHtml += '<div class="pag-troco">Troco para: ' + d.troco + '</div>';
+  }
+  secPag.innerHTML = pagHtml;
+  nota.appendChild(secPag);
+
+  // ── Botão imprimir ──
+  var printArea = document.createElement('div');
+  printArea.className = 'print-area';
+  printArea.innerHTML =
+    '<button class="btn-print" onclick="window.print()">🖨️ Imprimir Notinha</button>' +
+    '<p class="print-hint">Este botão só funciona no dispositivo do dono</p>';
+  nota.appendChild(printArea);
+
+  // ── Rodapé ──
+  var footer = document.createElement('div');
+  footer.className = 'nota-footer';
+  footer.textContent = 'Obrigado pela preferência! 🧡';
+  nota.appendChild(footer);
+})();
+</script>
+</body>
+</html>
