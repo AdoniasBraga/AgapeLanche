@@ -227,117 +227,120 @@ body {
     return 'R$ ' + v.toFixed(2).replace('.', ',');
   }
 
-  function payLabel(pay, card) {
-    if (pay === 'pix')      return 'PIX';
-    if (pay === 'dinheiro') return 'Dinheiro';
-    if (pay === 'cartao')   return 'Cartão' + (card ? ' (' + (card === 'credito' ? 'Crédito' : 'Débito') + ')' : '');
-    return pay;
-  }
-
-  var hash = window.location.hash.slice(1);
   var nota = document.getElementById('nota');
-  var erro = document.getElementById('erroMsg');
 
-  if (!hash) {
-    erro.style.display = 'block';
-    return;
-  }
-
-  var d;
   try {
-    d = JSON.parse(decodeURIComponent(escape(atob(hash))));
-  } catch (e) {
-    erro.style.display = 'block';
-    return;
+    const raw    = window.location.hash.slice(1);
+    if (!raw) throw new Error('vazio');
+    const parts  = raw.split('~');
+    const name   = decodeURIComponent(parts[0] || '');
+    const type   = parts[1] || '';
+    const pay    = parts[2] || '';
+    const frete  = parseFloat(parts[3]) || 0;
+    const total  = parseFloat(parts[4]) || 0;
+    const sub    = total - frete;
+    const items  = (parts[5] || '').split('|').map(seg => {
+      const [n, q, p] = seg.split(';');
+      return { name: decodeURIComponent(n || ''), qty: parseInt(q) || 1, price: parseFloat(p) || 0 };
+    });
+    const addr   = decodeURIComponent(parts[6] || '');
+
+    const typeLabels = { d: 'Delivery', l: 'Comer no local', r: 'Retirar no balcão' };
+    const payLabels  = {
+      pix: 'PIX', 'cart-cr': 'Cartão Crédito', 'cart-db': 'Cartão Débito', din: 'Dinheiro'
+    };
+    const payLabel = payLabels[pay] || (pay.startsWith('din-') ? 'Dinheiro (troco p/ R$ ' + pay.slice(4) + ')' : pay);
+
+    // ── Cabeçalho ──
+    var header = document.createElement('div');
+    header.className = 'nota-header';
+    header.innerHTML =
+      '<div class="nota-brand">Ágape Lanche &amp; Pizzaria</div>' +
+      '<div class="nota-titulo">Confirmação de Pedido</div>' +
+      '<div class="nota-meta">' + name + '</div>';
+    nota.appendChild(header);
+
+    // ── Itens ──
+    var secItens = document.createElement('div');
+    secItens.className = 'nota-section';
+    secItens.innerHTML = '<div class="nota-section-title">Itens do Pedido</div>';
+    items.forEach(function (item) {
+      var row = document.createElement('div');
+      row.className = 'item-row';
+      row.innerHTML =
+        '<div class="item-nome">' + item.name + '</div>' +
+        '<span class="item-qty">x' + item.qty + '</span>' +
+        '<div class="item-preco">' + fmt(item.price * item.qty) + '</div>';
+      secItens.appendChild(row);
+    });
+    nota.appendChild(secItens);
+
+    // ── Totais ──
+    var secTotais = document.createElement('div');
+    secTotais.className = 'nota-section';
+    secTotais.innerHTML = '<div class="nota-section-title">Valores</div>';
+
+    var rowSub = document.createElement('div');
+    rowSub.className = 'total-row';
+    rowSub.innerHTML = '<span>Subtotal</span><span>' + fmt(sub) + '</span>';
+    secTotais.appendChild(rowSub);
+
+    if (type === 'd') {
+      var rowFrete = document.createElement('div');
+      rowFrete.className = 'total-row';
+      rowFrete.innerHTML = '<span>Frete</span><span>' + fmt(frete) + '</span>';
+      secTotais.appendChild(rowFrete);
+    }
+
+    var rowTotal = document.createElement('div');
+    rowTotal.className = 'total-row total-final';
+    rowTotal.innerHTML = '<span>Total</span><span>' + fmt(total) + '</span>';
+    secTotais.appendChild(rowTotal);
+    nota.appendChild(secTotais);
+
+    // ── Endereço (só delivery) ──
+    if (type === 'd' && addr) {
+      var secEnd = document.createElement('div');
+      secEnd.className = 'nota-section';
+      secEnd.innerHTML =
+        '<div class="nota-section-title">Endereço de Entrega</div>' +
+        '<div class="endereco-bloco">' + addr + '</div>';
+      nota.appendChild(secEnd);
+    }
+
+    // ── Tipo de pedido ──
+    var secTipo = document.createElement('div');
+    secTipo.className = 'nota-section';
+    secTipo.innerHTML =
+      '<div class="nota-section-title">Tipo</div>' +
+      '<div class="pag-valor">' + (typeLabels[type] || type) + '</div>';
+    nota.appendChild(secTipo);
+
+    // ── Pagamento ──
+    var secPag = document.createElement('div');
+    secPag.className = 'nota-section';
+    secPag.innerHTML =
+      '<div class="nota-section-title">Pagamento</div>' +
+      '<div class="pag-valor">' + payLabel + '</div>';
+    nota.appendChild(secPag);
+
+    // ── Botão imprimir ──
+    var printArea = document.createElement('div');
+    printArea.className = 'print-area';
+    printArea.innerHTML =
+      '<button class="btn-print" onclick="window.print()">🖨️ Imprimir Notinha</button>' +
+      '<p class="print-hint">Este botão só funciona no dispositivo do dono</p>';
+    nota.appendChild(printArea);
+
+    // ── Rodapé ──
+    var footer = document.createElement('div');
+    footer.className = 'nota-footer';
+    footer.textContent = 'Obrigado pela preferência! 🧡';
+    nota.appendChild(footer);
+
+  } catch(e) {
+    nota.innerHTML = '<p style="text-align:center;color:#999;padding:2rem;">Pedido não encontrado.</p>';
   }
-
-  // ── Cabeçalho ──
-  var header = document.createElement('div');
-  header.className = 'nota-header';
-  header.innerHTML =
-    '<div class="nota-brand">Ágape Lanche &amp; Pizzaria</div>' +
-    '<div class="nota-titulo">Confirmação de Pedido</div>' +
-    '<div class="nota-meta">Pedido #' + d.id + '<br>' + d.dt + '</div>';
-  nota.appendChild(header);
-
-  // ── Itens ──
-  var secItens = document.createElement('div');
-  secItens.className = 'nota-section';
-  secItens.innerHTML = '<div class="nota-section-title">Itens do Pedido</div>';
-  d.items.forEach(function (item) {
-    var row = document.createElement('div');
-    row.className = 'item-row';
-    var tamanho = item.size ? '<span class="item-tamanho"> (' + item.size + ')</span>' : '';
-    row.innerHTML =
-      '<div class="item-nome">' + item.name + tamanho + '</div>' +
-      '<span class="item-qty">x' + item.qty + '</span>' +
-      '<div class="item-preco">' + fmt(item.price * item.qty) + '</div>';
-    secItens.appendChild(row);
-  });
-  nota.appendChild(secItens);
-
-  // ── Totais ──
-  var secTotais = document.createElement('div');
-  secTotais.className = 'nota-section';
-  secTotais.innerHTML = '<div class="nota-section-title">Valores</div>';
-
-  var rowSub = document.createElement('div');
-  rowSub.className = 'total-row';
-  rowSub.innerHTML = '<span>Subtotal</span><span>' + fmt(d.sub) + '</span>';
-  secTotais.appendChild(rowSub);
-
-  if (d.type === 'delivery') {
-    var rowFrete = document.createElement('div');
-    rowFrete.className = 'total-row';
-    rowFrete.innerHTML = '<span>Frete</span><span>' + fmt(d.frete) + '</span>';
-    secTotais.appendChild(rowFrete);
-  }
-
-  var rowTotal = document.createElement('div');
-  rowTotal.className = 'total-row total-final';
-  rowTotal.innerHTML = '<span>Total</span><span>' + fmt(d.total) + '</span>';
-  secTotais.appendChild(rowTotal);
-  nota.appendChild(secTotais);
-
-  // ── Endereço (só delivery) ──
-  if (d.type === 'delivery' && d.address) {
-    var a = d.address;
-    var secEnd = document.createElement('div');
-    secEnd.className = 'nota-section';
-    var endTexto = a.street + ', ' + a.number + ' — ' + a.hood;
-    if (a.comp) endTexto += '<br>Complemento: ' + a.comp;
-    if (a.ref)  endTexto += '<br>Referência: ' + a.ref;
-    secEnd.innerHTML =
-      '<div class="nota-section-title">Endereço de Entrega</div>' +
-      '<div class="endereco-bloco">' + endTexto + '</div>';
-    nota.appendChild(secEnd);
-  }
-
-  // ── Pagamento ──
-  var secPag = document.createElement('div');
-  secPag.className = 'nota-section';
-  var pagHtml =
-    '<div class="nota-section-title">Pagamento</div>' +
-    '<div class="pag-valor">' + payLabel(d.pay, d.card) + '</div>';
-  if (d.pay === 'dinheiro' && d.troco) {
-    pagHtml += '<div class="pag-troco">Troco para: ' + d.troco + '</div>';
-  }
-  secPag.innerHTML = pagHtml;
-  nota.appendChild(secPag);
-
-  // ── Botão imprimir ──
-  var printArea = document.createElement('div');
-  printArea.className = 'print-area';
-  printArea.innerHTML =
-    '<button class="btn-print" onclick="window.print()">🖨️ Imprimir Notinha</button>' +
-    '<p class="print-hint">Este botão só funciona no dispositivo do dono</p>';
-  nota.appendChild(printArea);
-
-  // ── Rodapé ──
-  var footer = document.createElement('div');
-  footer.className = 'nota-footer';
-  footer.textContent = 'Obrigado pela preferência! 🧡';
-  nota.appendChild(footer);
 })();
 </script>
 </body>

@@ -3167,30 +3167,31 @@ document.addEventListener('DOMContentLoaded', function() {
     msg += `\n*Total: ${fmt(orderType === 'delivery' ? sub + FRETE : sub)}*`;
 
     // Gerar nota de pedido
-    const pedidoData = {
-      id: Date.now().toString().slice(-4),
-      dt: new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}),
-      name: name,
-      type: orderType,
-      items: cartItems.map(i => ({ name: i.name, size: i.size || null, qty: i.qty, price: i.price })),
-      sub: sub,
-      frete: orderType === 'delivery' ? FRETE : 0,
-      total: orderType === 'delivery' ? sub + FRETE : sub,
-      address: orderType === 'delivery' ? {
-        street: document.getElementById('checkoutStreet').value.trim(),
-        number: document.getElementById('checkoutNumber').value.trim(),
-        hood:   document.getElementById('checkoutNeighborhood').value.trim(),
-        comp:   document.getElementById('checkoutComplement').value.trim(),
-        ref:    document.getElementById('checkoutReference').value.trim()
-      } : null,
-      pay: paymentMethod,
-      card: cardType || null,
-      troco: paymentMethod === 'dinheiro' ? document.getElementById('checkoutTroco').value.trim() : ''
-    };
-    const hash = btoa(unescape(encodeURIComponent(JSON.stringify(pedidoData))));
-    const notaURL = 'https://oliveiralincoln-dev.github.io/agape-lanche/nota.html#' + hash;
+    const typeMap = { delivery: 'd', local: 'l', retirada: 'r' };
+    let payStr = paymentMethod;
+    if (paymentMethod === 'cartao') payStr = cardType === 'credito' ? 'cart-cr' : 'cart-db';
+    if (paymentMethod === 'dinheiro') {
+      const troco = document.getElementById('checkoutTroco').value.trim();
+      payStr = troco ? 'din-' + troco.replace(/[^\d,\.]/g,'') : 'din';
+    }
+    const frete = orderType === 'delivery' ? FRETE : 0;
+    const total  = orderType === 'delivery' ? sub + FRETE : sub;
+    const itemsStr = cartItems.map(i => {
+      const n = i.size ? i.name + ' (' + i.size + ')' : i.name;
+      return encodeURIComponent(n) + ';' + i.qty + ';' + i.price.toFixed(2);
+    }).join('|');
+    const addrStr = orderType === 'delivery'
+      ? encodeURIComponent([
+          document.getElementById('checkoutStreet').value.trim(),
+          document.getElementById('checkoutNumber').value.trim(),
+          document.getElementById('checkoutNeighborhood').value.trim(),
+          document.getElementById('checkoutComplement').value.trim(),
+          document.getElementById('checkoutReference').value.trim()
+        ].filter(Boolean).join(' '))
+      : '';
+    const compact  = encodeURIComponent(name) + '~' + typeMap[orderType] + '~' + payStr + '~' + frete + '~' + total.toFixed(2) + '~' + itemsStr + '~' + addrStr;
+    const notaURL  = 'https://oliveiralincoln-dev.github.io/agape-lanche/nota.html#' + compact;
 
-    // Adicionar link da nota na mensagem do WhatsApp
     msg += '\n\n🧾 *Ver pedido:* ' + notaURL;
 
     window.open('https://wa.me/' + PHONE + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
