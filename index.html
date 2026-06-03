@@ -3166,8 +3166,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     msg += `\n*Total: ${fmt(orderType === 'delivery' ? sub + FRETE : sub)}*`;
 
-    window.open(`https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
-
     // Gerar nota de pedido
     const pedidoData = {
       id: Date.now().toString().slice(-4),
@@ -3190,7 +3188,13 @@ document.addEventListener('DOMContentLoaded', function() {
       troco: paymentMethod === 'dinheiro' ? document.getElementById('checkoutTroco').value.trim() : ''
     };
     const hash = btoa(unescape(encodeURIComponent(JSON.stringify(pedidoData))));
-    window.open('nota.html#' + hash, '_blank', 'noopener');
+    const notaURL = 'https://oliveiralincoln-dev.github.io/agape-lanche/nota.html#' + hash;
+
+    // Adicionar link da nota na mensagem do WhatsApp
+    msg += '\n\n🧾 *Ver pedido:* ' + notaURL;
+
+    window.open('https://wa.me/' + PHONE + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+    window.open(notaURL, '_blank', 'noopener');
 
     closeCheckout();
     const cartOverlay = document.getElementById('cartOverlay');
