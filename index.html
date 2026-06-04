@@ -3217,7 +3217,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ].filter(Boolean).join(' '))
       : '';
     const compact = encodeURIComponent(name) + '~' + typeMap[orderType] + '~' + payStr + '~' + frete + '~' + total.toFixed(2) + '~' + itemsStr + '~' + addrStr;
-    const notaURL = 'https://oliveiralincoln-dev.github.io/agape-lanche/nota.html#' + compact;
+    const notaURL = window.location.origin + '/nota.html#' + compact;
 
     msg += '\n\n🧾 *Ver pedido:* ' + notaURL;
 
