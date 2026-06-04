@@ -347,19 +347,94 @@ body {
 </script>
 
 <script>
-document.getElementById('btnPrint').addEventListener('click', function() {
-  const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
-  if (isMobile && navigator.share) {
-    navigator.share({
-      title: 'Nota do Pedido — Ágape Lanche & Pizzaria',
-      url: window.location.href
-    }).catch(function() {
-      window.print();
-    });
-  } else {
-    window.print();
+(function() {
+  function pad(str, total) {
+    var s = String(str);
+    while (s.length < total) s += ' ';
+    return s;
   }
-});
+  function linha(label, valor) {
+    var espacos = 32 - label.length - valor.length;
+    if (espacos < 1) espacos = 1;
+    return label + Array(espacos + 1).join('.') + valor;
+  }
+
+  var btn = document.getElementById('btnPrint');
+  if (!btn) return;
+
+  btn.addEventListener('click', function() {
+    var isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+
+    if (isMobile && navigator.share) {
+      try {
+        var raw    = window.location.hash.slice(1);
+        var parts  = raw.split('~');
+        var nome   = decodeURIComponent(parts[0] || '');
+        var tipo   = parts[1] || '';
+        var pay    = parts[2] || '';
+        var frete  = parseFloat(parts[3]) || 0;
+        var total  = parseFloat(parts[4]) || 0;
+        var sub    = total - frete;
+        var items  = (parts[5] || '').split('|').map(function(seg) {
+          var p = seg.split(';');
+          return { name: decodeURIComponent(p[0] || ''), qty: parseInt(p[1]) || 1, price: parseFloat(p[2]) || 0 };
+        });
+        var addr = decodeURIComponent(parts[6] || '');
+
+        var tipoLabels = { d: 'Delivery', l: 'Comer no local', r: 'Retirar no balcao' };
+        var payLabels  = { 'pix': 'PIX', 'cart-cr': 'Cartao Credito', 'cart-db': 'Cartao Debito', 'din': 'Dinheiro' };
+        var payLabel   = payLabels[pay] || (pay.startsWith('din-') ? 'Dinheiro (troco R$ ' + pay.slice(4) + ')' : pay);
+
+        var sep  = '================================';
+        var sep2 = '--------------------------------';
+        var linhas = [];
+
+        linhas.push(sep);
+        linhas.push('   AGAPE LANCHE & PIZZARIA');
+        linhas.push('     Confirmacao de Pedido');
+        linhas.push(sep);
+        linhas.push('Cliente: ' + nome);
+        linhas.push(sep2);
+        linhas.push('ITENS:');
+
+        items.forEach(function(item) {
+          var precoTotal = 'R$' + (item.price * item.qty).toFixed(2).replace('.', ',');
+          linhas.push(linha('  ' + item.name + ' x' + item.qty, precoTotal));
+        });
+
+        linhas.push(sep2);
+        linhas.push(linha('Subtotal', 'R$' + sub.toFixed(2).replace('.', ',')));
+        if (tipo === 'd') {
+          linhas.push(linha('Frete', 'R$' + frete.toFixed(2).replace('.', ',')));
+        }
+        linhas.push(linha('TOTAL', 'R$' + total.toFixed(2).replace('.', ',')));
+        linhas.push(sep2);
+        linhas.push('Tipo: ' + (tipoLabels[tipo] || tipo));
+        linhas.push('Pagamento: ' + payLabel);
+
+        if (tipo === 'd' && addr) {
+          linhas.push(sep2);
+          linhas.push('Endereco:');
+          linhas.push(addr);
+        }
+
+        linhas.push(sep);
+        linhas.push('   Obrigado pela preferencia!');
+        linhas.push(sep);
+
+        navigator.share({
+          title: 'Nota - Agape Lanche',
+          text: linhas.join('\n')
+        }).catch(function() { window.print(); });
+
+      } catch(e) {
+        window.print();
+      }
+    } else {
+      window.print();
+    }
+  });
+})();
 </script>
 </body>
 </html>
