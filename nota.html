@@ -330,7 +330,7 @@ body {
     var printArea = document.createElement('div');
     printArea.className = 'print-area';
     printArea.innerHTML =
-      '<button class="btn-print" onclick="window.print()">🖨️ Imprimir Notinha</button>' +
+      '<button class="btn-print" id="btnPrint">🖨️ Imprimir Notinha</button>' +
       '<p class="print-hint">Este botão só funciona no dispositivo do dono</p>';
     nota.appendChild(printArea);
 
@@ -344,6 +344,22 @@ body {
     document.getElementById('nota').innerHTML = '<p style="text-align:center;color:#999;padding:2rem;">Pedido não encontrado.</p>';
   }
 })();
+</script>
+
+<script>
+document.getElementById('btnPrint').addEventListener('click', function() {
+  const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+  if (isMobile && navigator.share) {
+    navigator.share({
+      title: 'Nota do Pedido — Ágape Lanche & Pizzaria',
+      url: window.location.href
+    }).catch(function() {
+      window.print();
+    });
+  } else {
+    window.print();
+  }
+});
 </script>
 </body>
 </html>
