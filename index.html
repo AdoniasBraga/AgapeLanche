@@ -1495,7 +1495,117 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   pointer-events: none;
   cursor: not-allowed;
 }
+.meia-toggle-wrap {
+  margin: 14px 0 4px;
+}
+.meia-toggle {
+  display: flex;
+  gap: 8px;
+  background: var(--bg-1);
+  border-radius: 100px;
+  padding: 4px;
+}
+.meia-btn {
+  flex: 1;
+  padding: 10px 8px;
+  border: none;
+  border-radius: 100px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 44px;
+}
+.meia-btn.active {
+  background: var(--accent);
+  color: #fff;
+}
+.meia-picker-wrap {
+  margin-top: 12px;
+}
+.meia-picker {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+  padding: 4px 2px;
+}
+.meia-sabor-btn {
+  padding: 10px 8px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-1);
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  text-align: center;
+  min-height: 48px;
+  transition: all 0.15s;
+  line-height: 1.3;
+}
+.meia-sabor-btn.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.meia-sabor-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Restaurant",
+  "name": "Ágape Lanche & Pizzaria",
+  "url": "https://www.agapelanche.com.br",
+  "logo": "https://www.agapelanche.com.br/img/logo.png",
+  "image": "https://www.agapelanche.com.br/img/logo.png",
+  "description": "Lanches artesanais e pizzas fresquinhas com entrega na Zona Leste de Manaus.",
+  "telephone": "+55-92-99118-4420",
+  "servesCuisine": ["Lanches", "Pizza", "Fast Food"],
+  "priceRange": "R$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "São José Operário",
+    "addressLocality": "Manaus",
+    "addressRegion": "AM",
+    "postalCode": "69083-000",
+    "addressCountry": "BR"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": -3.0716,
+    "longitude": -59.9514
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday","Tuesday","Wednesday",
+        "Thursday","Friday","Saturday","Sunday"
+      ],
+      "opens": "18:00",
+      "closes": "00:00"
+    }
+  ],
+  "hasMenu": "https://www.agapelanche.com.br",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+55-92-99118-4420",
+    "contactType": "customer service",
+    "contactOption": "TollFree",
+    "availableLanguage": "Portuguese"
+  }
+}
+</script>
 </head>
 <body>
 
@@ -2800,6 +2910,19 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="pizza-modal-sub" id="pizzaModalDesc"></div>
     <span class="pizza-size-label">Escolha o tamanho</span>
     <div class="pizza-size-options" id="pizzaSizeOptions"></div>
+
+    <div class="meia-toggle-wrap" id="meiaToggleWrap" style="display:none">
+      <div class="meia-toggle">
+        <button class="meia-btn active" id="meiaInteira">🍕 Inteira</button>
+        <button class="meia-btn" id="meiaMeta">½ Meia a Meia</button>
+      </div>
+    </div>
+
+    <div class="meia-picker-wrap" id="meiaPickerWrap" style="display:none">
+      <div class="pizza-size-label">Escolha o 2º sabor</div>
+      <div class="meia-picker" id="meiaPicker"></div>
+    </div>
+
     <button class="pizza-modal-confirm" id="pizzaModalConfirm">
       Adicionar ao Carrinho
     </button>
@@ -2809,14 +2932,21 @@ document.addEventListener('DOMContentLoaded', function() {
 <script>
 /* ============ PIZZA MODAL ============ */
 (function() {
-  const overlay = document.getElementById('pizzaModalOverlay');
-  const modalName = document.getElementById('pizzaModalName');
-  const modalDesc = document.getElementById('pizzaModalDesc');
-  const sizeOptions = document.getElementById('pizzaSizeOptions');
+  const overlay    = document.getElementById('pizzaModalOverlay');
+  const modalName  = document.getElementById('pizzaModalName');
+  const modalDesc  = document.getElementById('pizzaModalDesc');
+  const sizeOptions= document.getElementById('pizzaSizeOptions');
   const confirmBtn = document.getElementById('pizzaModalConfirm');
-  const closeBtn = document.getElementById('pizzaModalClose');
+  const closeBtn   = document.getElementById('pizzaModalClose');
+  const meiaToggleWrap = document.getElementById('meiaToggleWrap');
+  const meiaInteira    = document.getElementById('meiaInteira');
+  const meiaMeta       = document.getElementById('meiaMeta');
+  const meiaPickerWrap = document.getElementById('meiaPickerWrap');
+  const meiaPicker     = document.getElementById('meiaPicker');
 
-  let selectedSize = null;
+  let selectedSize  = null;
+  let selectedMeia  = false;   // false = inteira, true = meia a meia
+  let selectedSabor2 = null;   // nome do 2º sabor
 
   const SIZES = {
     'Pizza Mussarela':          [{label:'Média (M)',desc:'Serve 2 pessoas',price:'30,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'35,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'40,00'}],
@@ -2837,11 +2967,26 @@ document.addEventListener('DOMContentLoaded', function() {
     'Pizza Romeu e Julieta':    [{label:'Média (M)',desc:'Serve 2 pessoas',price:'30,00'},{label:'Grande (G)',desc:'Serve 4 pessoas',price:'35,00'},{label:'Família (F)',desc:'Serve 6 pessoas',price:'40,00'}],
   };
 
+  const ALL_PIZZAS = Object.keys(SIZES);
+
+  function getPrice(pizzaName, sizeLabel) {
+    const sizes = SIZES[pizzaName] || SIZES['Pizza Calabresa'];
+    const s = sizes.find(x => x.label === sizeLabel);
+    return s ? parseFloat(s.price.replace(',','.')) : 0;
+  }
+
   function openPizzaModal(name, desc) {
     modalName.textContent = name;
     modalDesc.textContent = desc;
     sizeOptions.innerHTML = '';
-    selectedSize = null;
+    selectedSize   = null;
+    selectedMeia   = false;
+    selectedSabor2 = null;
+
+    meiaToggleWrap.style.display = 'none';
+    meiaPickerWrap.style.display = 'none';
+    meiaInteira.classList.add('active');
+    meiaMeta.classList.remove('active');
 
     const sizes = SIZES[name] || SIZES['Pizza Calabresa'];
     sizes.forEach(s => {
@@ -2858,6 +3003,7 @@ document.addEventListener('DOMContentLoaded', function() {
         sizeOptions.querySelectorAll('.pizza-size-btn').forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
         selectedSize = s;
+        meiaToggleWrap.style.display = 'block';
       });
       sizeOptions.appendChild(btn);
     });
@@ -2865,6 +3011,38 @@ document.addEventListener('DOMContentLoaded', function() {
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
+
+  function buildSaborPicker(firstName) {
+    meiaPicker.innerHTML = '';
+    ALL_PIZZAS.forEach(nome => {
+      if (nome === firstName) return; // não mostra o 1º sabor
+      const btn = document.createElement('button');
+      btn.className = 'meia-sabor-btn';
+      btn.textContent = nome.replace('Pizza ', '');
+      btn.addEventListener('click', () => {
+        meiaPicker.querySelectorAll('.meia-sabor-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedSabor2 = nome;
+      });
+      meiaPicker.appendChild(btn);
+    });
+  }
+
+  meiaInteira.addEventListener('click', () => {
+    selectedMeia = false;
+    selectedSabor2 = null;
+    meiaInteira.classList.add('active');
+    meiaMeta.classList.remove('active');
+    meiaPickerWrap.style.display = 'none';
+  });
+
+  meiaMeta.addEventListener('click', () => {
+    selectedMeia = true;
+    meiaMeta.classList.add('active');
+    meiaInteira.classList.remove('active');
+    buildSaborPicker(modalName.textContent);
+    meiaPickerWrap.style.display = 'block';
+  });
 
   function closeModal() {
     overlay.classList.remove('open');
@@ -2876,8 +3054,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
   confirmBtn.addEventListener('click', () => {
     if (!selectedSize) { alert('Selecione um tamanho primeiro!'); return; }
-    const name = modalName.textContent;
-    window.cartAddItem(name, selectedSize.label, parseFloat(selectedSize.price.replace(',','.')));
+    if (selectedMeia && !selectedSabor2) { alert('Selecione o 2º sabor!'); return; }
+
+    const name1 = modalName.textContent;
+    const sizeLabel = selectedSize.label;
+
+    if (selectedMeia) {
+      const price1 = getPrice(name1, sizeLabel);
+      const price2 = getPrice(selectedSabor2, sizeLabel);
+      const finalPrice = Math.max(price1, price2);
+      const sabor1 = name1.replace('Pizza ', '');
+      const sabor2 = selectedSabor2.replace('Pizza ', '');
+      const cartName = '½ ' + sabor1 + ' + ½ ' + sabor2;
+      window.cartAddItem(cartName, sizeLabel, finalPrice);
+    } else {
+      window.cartAddItem(name1, sizeLabel, parseFloat(selectedSize.price.replace(',','.')));
+    }
     closeModal();
   });
 
