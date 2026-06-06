@@ -1495,6 +1495,40 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   pointer-events: none;
   cursor: not-allowed;
 }
+/* ===== BURGER LOADING ===== */
+.loading-icon {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 1;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.menu-item-img.img-loaded .loading-icon { opacity: 0; }
+.burger-anim {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  animation: burger-bounce 0.7s ease-in-out infinite alternate;
+}
+.bun-top, .bun-bot { width: 28px; height: 6px; background: #D52B1E; border-radius: 6px 6px 2px 2px; }
+.bun-bot { border-radius: 2px 2px 6px 6px; }
+.burger-meat { width: 28px; height: 5px; background: #8B4513; border-radius: 2px; }
+.burger-cheese { width: 28px; height: 3px; background: #FDC82F; border-radius: 1px; }
+@keyframes burger-bounce {
+  from { transform: translateY(0px); }
+  to   { transform: translateY(-7px); }
+}
+.menu-item-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.45s ease, transform 0.6s;
+}
+.menu-item-img.img-loaded img { opacity: 1; }
+.menu-item:hover .menu-item-img img { transform: scale(1.08); }
 .meia-toggle-wrap {
   margin: 14px 0 4px;
 }
@@ -1633,7 +1667,6 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
     <li><a href="#cardapio">Cardápio</a></li>
     <li><a href="#avaliacoes">Avaliações</a></li>
     <li><a href="#contato">Contato</a></li>
-    <li><a href="https://wa.me/5592991184420?text=Oi!%20Quero%20fazer%20um%20pedido" class="menu-cta">Peça Online →</a></li>
   </ul>
 </div>
 
@@ -1649,7 +1682,6 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
       <h1 class="hero-title">Sabor que<br>vem do <span class="accent">coração.</span></h1>
       <p class="hero-tagline">Lanches e pizzas feitos com amor, ingredientes frescos e aquele gosto de comida de verdade. Delivery só na Zona Leste — rápido, quentinho e sem enrolação.</p>
       <div class="hero-cta">
-        <a href="https://wa.me/5592991184420?text=Oi!%20Quero%20fazer%20um%20pedido" target="_blank" class="btn btn-primary">Peça Agora <span class="btn-arrow">→</span></a>
         <a href="#cardapio" class="btn btn-secondary">Ver Cardápio</a>
       </div>
     </div>
@@ -3547,6 +3579,34 @@ document.addEventListener('DOMContentLoaded', function () {
       console.warn('[Ágape] Disponibilidade: falha ao carregar planilha.', err);
     });
 })();
+</script>
+
+<script>
+/* ===== BURGER LOADING — REVEAL ON LOAD ===== */
+document.addEventListener('DOMContentLoaded', function () {
+  var burgerHTML =
+    '<div class="loading-icon">' +
+      '<div class="burger-anim">' +
+        '<div class="bun-top"></div>' +
+        '<div class="burger-cheese"></div>' +
+        '<div class="burger-meat"></div>' +
+        '<div class="bun-bot"></div>' +
+      '</div>' +
+    '</div>';
+
+  document.querySelectorAll('.menu-item-img').forEach(function (container) {
+    container.insertAdjacentHTML('afterbegin', burgerHTML);
+    var img = container.querySelector('img');
+    if (!img) return;
+    function reveal() { container.classList.add('img-loaded'); }
+    if (img.complete && img.naturalWidth > 0) {
+      reveal();
+    } else {
+      img.addEventListener('load',  reveal);
+      img.addEventListener('error', reveal);
+    }
+  });
+});
 </script>
 
 </body>
