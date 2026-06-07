@@ -2629,7 +2629,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   const h = now.getHours();
   const m = now.getMinutes();
   const minutos = h * 60 + m;
-  const abertura = 18 * 60 + 30;
+  const abertura = 18 * 60;
   const fechamento = 24 * 60;
   const aberto = minutos >= abertura && minutos < fechamento;
   badge.innerHTML = aberto
