@@ -1597,6 +1597,42 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* ===== PERFORMANCE MOBILE ===== */
+@media (max-width: 768px) {
+  body::before {
+    display: none;
+  }
+
+  .nav {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(245, 236, 215, 0.97);
+  }
+
+  .mobile-menu {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .menu-filters {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .checkout-overlay {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .hero-bg img {
+    animation: none;
+  }
+
+  .burger-anim {
+    animation: none;
+  }
+}
 </style>
 
 <script type="application/ld+json">
