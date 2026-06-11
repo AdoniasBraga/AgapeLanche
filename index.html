@@ -37,7 +37,8 @@
 <link rel="apple-touch-icon" href="img/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@300;400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@300;400;500;600;700;800&display=swap"></noscript>
 <style>
 :root {
   --bg-0: #F5ECD7;
@@ -3554,9 +3555,13 @@ document.addEventListener('DOMContentLoaded', function () {
   const SHEET_ID = '1CBP566fRJeB4_Jdgex9vTBZr7A_WqNBBxdTDMvSPU8s';
   const url = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:json&gid=1235310249';
 
-  fetch(url)
+  const controller = new AbortController();
+  const timeoutId = setTimeout(function () { controller.abort(); }, 5000);
+
+  fetch(url, { signal: controller.signal })
     .then(function (r) { return r.text(); })
     .then(function (text) {
+      clearTimeout(timeoutId);
       const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/);
       if (!match) return;
 
@@ -3580,6 +3585,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     })
     .catch(function (err) {
+      clearTimeout(timeoutId);
       console.warn('[Ágape] Disponibilidade: falha ao carregar planilha.', err);
     });
 })();
