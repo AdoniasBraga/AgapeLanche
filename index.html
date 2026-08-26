@@ -2363,8 +2363,8 @@ body.loja-fechada #heroBadge .dot {
       <h3 class="menu-item-name">Coca-Cola</h3>
       <p class="menu-item-desc">Lata · 1 Litro · 1,5 Litro · 2 Litros</p>
       <div class="menu-item-foot">
-        <div class="menu-item-price"><small>A partir de R$</small> 5,00</div>
-        <button class="menu-item-add" data-name="Coca-Cola" data-drink="true" data-sizes='[{"label":"Lata","price":5},{"label":"1 Litro","price":10},{"label":"1,5 Litro","price":12},{"label":"2 Litros","price":15}]' aria-label="Escolher tamanho">+</button>
+        <div class="menu-item-price"><small>A partir de R$</small> 6,00</div>
+        <button class="menu-item-add" data-name="Coca-Cola" data-drink="true" data-sizes='[{"label":"Lata","price":6},{"label":"1 Litro","price":10},{"label":"1,5 Litro","price":12},{"label":"2 Litros","price":15}]' aria-label="Escolher tamanho">+</button>
       </div>
     </article>
 
@@ -2590,7 +2590,7 @@ body.loja-fechada #heroBadge .dot {
         <div class="info-icon">🕐</div>
         <div>
           <h4>Horário</h4>
-          <p>Todos os dias<br>18:00 às 00:00</p>
+          <p>Terça a domingo<br>18:00 às 00:00</p>
         </div>
       </div>
       <div class="info-card reveal">
@@ -3605,10 +3605,10 @@ document.addEventListener('DOMContentLoaded', function () {
 /* ============ DISPONIBILIDADE (GOOGLE SHEETS) ============ */
 (function () {
   const SHEET_ID = '1CBP566fRJeB4_Jdgex9vTBZr7A_WqNBBxdTDMvSPU8s';
-  const url = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:json&gid=1235310249';
+  const url = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:json&gid=1235310249&_=' + Date.now();
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(function () { controller.abort(); }, 5000);
+  const timeoutId = setTimeout(function () { controller.abort(); }, 8000);
 
   fetch(url, { signal: controller.signal })
     .then(function (r) { return r.text(); })
@@ -3619,13 +3619,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const rows = JSON.parse(match[1]).table.rows;
       const availability = {};
+      var statusLoja = null;
+      var dataStatus = null;
+
+      function normalizar(s) {
+        return String(s).trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      }
 
       rows.forEach(function (row) {
         if (!row.c || !row.c[0] || !row.c[0].v) return;
         const name = String(row.c[0].v).trim();
-        const val  = row.c[1] && row.c[1].v ? String(row.c[1].v).trim().toUpperCase() : 'SIM';
-        availability[name] = (val !== 'NÃO' && val !== 'NAO');
+
+        /* Linha reservada de controle da loja - nao e um produto */
+        if (normalizar(name) === 'STATUS_LOJA') {
+          statusLoja = (row.c[1] && row.c[1].v != null) ? String(row.c[1].v) : '';
+          dataStatus = row.c[2] ? (row.c[2].v != null ? row.c[2].v : row.c[2].f) : null;
+          return;
+        }
+
+        const val = (row.c[1] && row.c[1].v) ? normalizar(row.c[1].v) : 'SIM';
+        availability[name] = (val !== 'NAO');
       });
+
+      /* Repassa o override manual para o controle de funcionamento */
+      if (window.AgapeLoja) {
+        window.AgapeLoja.definirOverride(statusLoja, dataStatus);
+      }
 
       document.querySelectorAll('.menu-item').forEach(function (item) {
         const btn = item.querySelector('.menu-item-add');
@@ -3672,63 +3691,170 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <script>
-/* ===== MODO FECHADO — SEGUNDA-FEIRA ===== */
+/* ===== CONTROLE DE FUNCIONAMENTO DA LOJA =====
+   Automatico : fechada as segundas; badge segue o horario 18:00-00:00.
+   Manual     : planilha, linha STATUS_LOJA -> ABERTO | FECHADO | AUTO (coluna B)
+                data opcional na coluna C = dia em que a marcacao vale.
+   Se a planilha nao carregar, vale o automatico.
+*/
 (function () {
-  if (new Date().getDay() !== 1) return; // 0=Dom 1=Seg 2=Ter...
+  var DIA_FECHADO_PADRAO = 1;   // 0=Dom 1=Seg 2=Ter 3=Qua 4=Qui 5=Sex 6=Sab
+  var HORA_ABERTURA      = 18;
+  var HORA_FECHAMENTO    = 24;
+  var NOMES_DIAS = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
 
-  // 1. Classe visual no body (CSS entra imediatamente)
-  document.body.classList.add('loja-fechada');
+  var override  = null;    // null | 'ABERTO' | 'FECHADO'
+  var iniciado  = false;
+  var bloqueado = false;
+  var originais = { cartAddItem: null, openCheckoutModal: null };
 
-  // 2. Atualizar badge do hero
-  var badge = document.getElementById('heroBadge');
-  if (badge) {
-    badge.innerHTML = '<span class="dot"></span>Fechado · Abrimos terça às 18:00';
+  function agoraManaus() {
+    return new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Manaus' }));
   }
 
-  // 3. Bloquear pedidos após todos os DOMContentLoaded rodarem
-  function aplicarBloqueio() {
-    var exibirToastFechado = function () {
-      var toast = document.getElementById('cartToast');
-      if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'cartToast';
-        toast.style.cssText = [
-          'position:fixed',
-          'bottom:140px',
-          'left:50%',
-          'transform:translateX(-50%)',
-          'background:#D52B1E',
-          'color:#fff',
-          'padding:12px 22px',
-          'border-radius:100px',
-          'font-size:14px',
-          'font-weight:700',
-          'z-index:300',
-          'opacity:0',
-          'transition:opacity 0.3s',
-          'white-space:nowrap',
-          'pointer-events:none',
-          'max-width:90vw',
-          'text-align:center'
-        ].join(';');
-        document.body.appendChild(toast);
-      }
-      toast.textContent = '🔴 Fechado hoje! Voltamos terça às 18h';
-      toast.style.opacity = '1';
-      clearTimeout(toast._t);
-      toast._t = setTimeout(function () { toast.style.opacity = '0'; }, 3000);
+  function proximoDiaAberto(d) {
+    for (var i = 1; i <= 7; i++) {
+      var prox = (d.getDay() + i) % 7;
+      if (prox !== DIA_FECHADO_PADRAO) return NOMES_DIAS[prox];
+    }
+    return 'em breve';
+  }
+
+  function estado() {
+    var d = agoraManaus();
+    var minutos = d.getHours() * 60 + d.getMinutes();
+    var fechadaHoje;
+    if      (override === 'FECHADO') fechadaHoje = true;
+    else if (override === 'ABERTO')  fechadaHoje = false;
+    else                             fechadaHoje = (d.getDay() === DIA_FECHADO_PADRAO);
+    return {
+      fechadaHoje    : fechadaHoje,
+      dentroDoHorario: (minutos >= HORA_ABERTURA * 60 && minutos < HORA_FECHAMENTO * 60),
+      proximoDia     : proximoDiaAberto(d)
     };
-
-    window.cartAddItem = exibirToastFechado;
-    window.openCheckoutModal = function () {};
   }
+
+  function renderBadge(st) {
+    var badge = document.getElementById('heroBadge');
+    if (!badge) return;
+    if (st.fechadaHoje) {
+      badge.innerHTML = '<span class="dot"></span>Fechado · Abrimos ' + st.proximoDia + ' às 18:00';
+    } else if (st.dentroDoHorario) {
+      badge.innerHTML = '<span class="dot"></span>Aberto agora · Entrega 18:00 até 00:00';
+    } else {
+      badge.innerHTML = '<span style="width:7px;height:7px;background:#aaa;border-radius:50%;display:inline-block"></span>Fechado · Abrimos às 18:00';
+    }
+  }
+
+  function toastFechado() {
+    var toast = document.getElementById('cartToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'cartToast';
+      toast.style.cssText = [
+        'position:fixed',
+        'bottom:140px',
+        'left:50%',
+        'transform:translateX(-50%)',
+        'background:#D52B1E',
+        'color:#fff',
+        'padding:12px 22px',
+        'border-radius:100px',
+        'font-size:14px',
+        'font-weight:700',
+        'z-index:300',
+        'opacity:0',
+        'transition:opacity 0.3s',
+        'white-space:nowrap',
+        'pointer-events:none',
+        'max-width:90vw',
+        'text-align:center'
+      ].join(';');
+      document.body.appendChild(toast);
+    }
+    toast.textContent = '🔴 Fechado hoje! Voltamos ' + estado().proximoDia + ' às 18h';
+    toast.style.opacity = '1';
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { toast.style.opacity = '0'; }, 3000);
+  }
+
+  function bloquear() {
+    if (bloqueado) return;
+    if (originais.cartAddItem === null && typeof window.cartAddItem === 'function') {
+      originais.cartAddItem = window.cartAddItem;
+    }
+    if (originais.openCheckoutModal === null && typeof window.openCheckoutModal === 'function') {
+      originais.openCheckoutModal = window.openCheckoutModal;
+    }
+    window.cartAddItem       = toastFechado;
+    window.openCheckoutModal = function () {};
+    document.body.classList.add('loja-fechada');
+    bloqueado = true;
+  }
+
+  function desbloquear() {
+    if (bloqueado) {
+      if (originais.cartAddItem)       window.cartAddItem       = originais.cartAddItem;
+      if (originais.openCheckoutModal) window.openCheckoutModal = originais.openCheckoutModal;
+      bloqueado = false;
+    }
+    document.body.classList.remove('loja-fechada');
+  }
+
+  function aplicar() {
+    if (!iniciado) return;
+    var st = estado();
+    renderBadge(st);
+    if (st.fechadaHoje) bloquear(); else desbloquear();
+  }
+
+  function parseData(valor) {
+    if (valor === null || valor === undefined || valor === '') return null;
+    var s = String(valor).trim(), m;
+    m = s.match(/^Date\((\d+),(\d+),(\d+)/);
+    if (m) return new Date(+m[1], +m[2], +m[3]);
+    m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
+    if (m) { var a = +m[3]; if (a < 100) a += 2000; return new Date(a, +m[2] - 1, +m[1]); }
+    m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+    return null;
+  }
+
+  function mesmoDia(a, b) {
+    return a.getFullYear() === b.getFullYear()
+        && a.getMonth()    === b.getMonth()
+        && a.getDate()     === b.getDate();
+  }
+
+  window.AgapeLoja = {
+    definirOverride: function (valorBruto, dataBruta) {
+      var v = valorBruto
+        ? String(valorBruto).trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        : '';
+
+      if (v !== 'ABERTO' && v !== 'FECHADO') {
+        override = null;
+      } else {
+        var dt = parseData(dataBruta);
+        if (dt && !mesmoDia(dt, agoraManaus())) {
+          override = null;
+        } else {
+          override = v;
+        }
+      }
+      aplicar();
+    },
+    estadoAtual: function () { return estado(); }
+  };
+
+  renderBadge(estado());
+
+  function init() { iniciado = true; aplicar(); }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () {
-      setTimeout(aplicarBloqueio, 0);
-    });
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(init, 0); });
   } else {
-    setTimeout(aplicarBloqueio, 0);
+    setTimeout(init, 0);
   }
 })();
 </script>
