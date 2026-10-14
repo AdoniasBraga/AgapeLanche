@@ -3561,10 +3561,11 @@ document.addEventListener('DOMContentLoaded', function () {
       leiteSection.style.display = isSuco ? 'block' : 'none';
 
       var sizes = JSON.parse(sizesJson);
-      var sizeMap = (window.AgapeSizeAvailability || {})[name] || {};
+      var norm = window.agapeNorm || function (t) { return String(t); };
+      var sizeMap = (window.AgapeSizeAvailability || {})[norm(name)] || {};
       sizeOptions.innerHTML = '';
       sizes.forEach(function (s) {
-        var esgotado = sizeMap[String(s.label).trim().toLowerCase()] === false;
+        var esgotado = sizeMap[norm(s.label)] === false;
         var btn = document.createElement('button');
         btn.className = 'pizza-size-btn' + (esgotado ? ' size-esgotado' : '');
         btn.type = 'button';
@@ -3639,6 +3640,15 @@ document.addEventListener('DOMContentLoaded', function () {
   const SHEET_ID = '1CBP566fRJeB4_Jdgex9vTBZr7A_WqNBBxdTDMvSPU8s';
   const url = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:json&gid=1235310249';
 
+  /* Normaliza nomes: ignora acento, maiúscula/minúscula e espaços extras.
+     'Baré' = 'bare' = ' BARÉ ' */
+  function norm(t) {
+    return String(t == null ? '' : t)
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, ' ').trim().toLowerCase();
+  }
+  window.agapeNorm = norm;
+
   const controller = new AbortController();
   const timeoutId = setTimeout(function () { controller.abort(); }, 5000);
 
@@ -3657,14 +3667,14 @@ document.addEventListener('DOMContentLoaded', function () {
       const rotulos = [];
       for (let i = 2; i < cabecalho.length; i++) {
         rotulos[i] = cabecalho[i] && cabecalho[i].v
-          ? String(cabecalho[i].v).trim().toLowerCase()
+          ? norm(cabecalho[i].v)
           : null;
       }
 
       rows.forEach(function (row, idx) {
         if (idx === 0) return;
         if (!row.c || !row.c[0] || !row.c[0].v) return;
-        const name = String(row.c[0].v).trim();
+        const name = norm(row.c[0].v);
         const val  = row.c[1] && row.c[1].v ? String(row.c[1].v).trim().toUpperCase() : 'SIM';
         availability[name] = (val !== 'NÃO' && val !== 'NAO');
 
@@ -3682,11 +3692,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
       window.AgapeSizeAvailability = sizeAvailability;
 
+      const nomesDoSite = {};
       document.querySelectorAll('.menu-item').forEach(function (item) {
         const btn = item.querySelector('.menu-item-add');
         if (!btn) return;
-        const name = (btn.dataset.name || '').trim();
-        if (name && Object.prototype.hasOwnProperty.call(availability, name) && !availability[name]) {
+        const name = norm(btn.dataset.name || '');
+        if (!name) return;
+        nomesDoSite[name] = true;
+        if (!Object.prototype.hasOwnProperty.call(availability, name)) {
+          console.warn('[Ágape] Produto sem linha na planilha (fica sempre disponível):', btn.dataset.name);
+        } else if (!availability[name]) {
           item.classList.add('esgotado');
         }
       });
